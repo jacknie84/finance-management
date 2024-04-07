@@ -1,10 +1,19 @@
 "use server"
 
-import apiClient from "@/api/core/api-client"
-import { Page } from "@/api/core/types"
+import apiClient, { buildPageRequest } from "@/api/api-client"
+import { Page, PageRequest } from "@/api/types"
+import { isEmpty } from "@/lib/utils"
+import { stringify } from "qs"
 
-export async function getSpendingLogsPage() {
-  const response = await apiClient.get<Page<SpendingLog>>("spending/logs")
+function buildSpendingLogsFilter(filter: SpendingLogsFilter) {
+  return stringify(filter, { arrayFormat: "comma" })
+}
+
+export async function getSpendingLogsPage(filter: SpendingLogsFilter, pageRequest: PageRequest) {
+  const queries = [buildSpendingLogsFilter(filter), buildPageRequest(pageRequest)]
+  const query = queries.filter((it) => !isEmpty(it)).join("&")
+  const response = await apiClient.get<Page<SpendingLog>>("spending/logs", query)
+  console.log(query)
   return response.entity?.body
 }
 
@@ -13,4 +22,8 @@ export type SpendingLog = {
   summary?: string
   amount: number
   time: { instant: string }
+}
+
+export type SpendingLogsFilter = {
+  containsSummary?: string[]
 }

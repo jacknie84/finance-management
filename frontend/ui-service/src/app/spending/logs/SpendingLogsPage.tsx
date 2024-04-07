@@ -47,7 +47,7 @@ export default function SpendingLogsPage() {
   const [paging, setPaging] = useState<FmPaging>()
   const [sizing, setSizing] = useState<FmSizing>()
   const { data: page } = useQuery({
-    queryKey: ["getSpendingLogsPage", pageRequest.page, pageRequest.size, filter],
+    queryKey: ["getSpendingLogsPage", pageRequest, filter],
     queryFn: () => getSpendingLogsPage(filter, pageRequest),
   })
   const rows = useMemo(() => {

@@ -1,10 +1,10 @@
 import { isEmpty } from "@/lib/utils"
-import { URLSearchParams } from "url"
+import { PageRequest } from "./types"
 
 const baseUrl = "http://localhost:8080/v1"
 
 const apiClient = {
-  async get<O>(path: string, query?: URLSearchParams) {
+  async get<O>(path: string, query?: string) {
     return await exchange<any, O>({ line: { method: "get", url: `${baseUrl}/${path}`, query } })
   },
   async post<I, O>(path: string, body: I) {
@@ -16,7 +16,7 @@ const apiClient = {
   async patch<I, O>(path: string, body: I) {
     return await exchange<I, O>({ line: { method: "patch", url: `${baseUrl}/${path}` }, entity: { body } })
   },
-  async delete<O>(path: string, query?: URLSearchParams) {
+  async delete<O>(path: string, query?: string) {
     return await exchange<any, O>({ line: { method: "delete", url: `${baseUrl}/${path}`, query } })
   },
 }
@@ -70,7 +70,7 @@ type Response<T = any> = {
 type RequestLine = {
   method: "get" | "post" | "put" | "patch" | "delete"
   url: string
-  query?: URLSearchParams
+  query?: string
 }
 
 type HttpEntity<T = any> = {
@@ -79,3 +79,20 @@ type HttpEntity<T = any> = {
 }
 
 export default apiClient
+
+export function buildPageRequest(pageRequest: PageRequest) {
+  const { page, size, sort } = pageRequest
+  const params = new Array<string>()
+  if (typeof page === "number") {
+    params.push(`page=${page}`)
+  }
+  if (typeof size === "number") {
+    params.push(`size=${size}`)
+  }
+  if (sort) {
+    const { fields, direction = "asc" } = sort
+    const prefix = fields.join(",")
+    params.push(`sort=${prefix},${direction}`)
+  }
+  return params.join("&")
+}
