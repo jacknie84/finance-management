@@ -17,6 +17,11 @@ data class SpendingLogEntity(
   var id: Long? = null,
 
   /**
+   * 소비 내용
+   */
+  var summary: String? = null,
+
+  /**
    * 소비 금액
    */
   @Column(nullable = false)

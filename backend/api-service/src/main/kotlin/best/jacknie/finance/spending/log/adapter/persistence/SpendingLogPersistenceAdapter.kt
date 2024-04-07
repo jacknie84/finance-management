@@ -22,6 +22,7 @@ class SpendingLogPersistenceAdapter(
   @Transactional
   override fun create(dto: SaveSpendingLog, user: UserEntity): SpendingLogEntity {
     val entity = SpendingLogEntity(
+      summary = dto.summary,
       amount = dto.amount,
       time = getSpendingTime(dto.time),
       tags = dto.tags,

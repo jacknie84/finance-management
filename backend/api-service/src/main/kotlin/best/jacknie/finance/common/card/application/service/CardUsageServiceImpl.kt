@@ -23,6 +23,7 @@ class CardUsageServiceImpl(
     try {
       val entity = usageOutPort.create(dto, card)
       val log = SaveSpendingLog(
+        summary = dto.merchant,
         amount = dto.amount,
         time =  dto.time,
         username = card.user.name,
@@ -47,6 +48,7 @@ class CardUsageServiceImpl(
     val entity = usageOutPort.findOne(cardId, id) ?: throw HttpStatusCodeException.NotFound("카드 사용 내역 정보를 찾을 수 없습니다(cardId: $cardId, id: $id)")
     try {
       val log = SaveSpendingLog(
+        summary = dto.merchant,
         amount = dto.amount,
         time =  dto.time,
         username = entity.card.user.name,
