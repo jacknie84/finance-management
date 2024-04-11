@@ -1,4 +1,4 @@
-package best.jacknie.finance.common.file.adapter.persistence
+package best.jacknie.finance.common.file.adapter.persistence.jpa
 
 import best.jacknie.finance.common.file.application.port.FileMetadataFilter
 import best.jacknie.finance.common.file.domain.FileMetadataEntity
@@ -8,7 +8,8 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 @Suppress("unused")
-class FileMetadataCustomRepositoryImpl: PagingRepositorySupport(FileMetadataEntity::class), FileMetadataCustomRepository {
+class FileMetadataCustomRepositoryImpl: PagingRepositorySupport(FileMetadataEntity::class),
+    FileMetadataCustomRepository {
 
   override fun findAll(filter: FileMetadataFilter, pageable: Pageable): Page<FileMetadataEntity> {
     return getPage(fileMetadataEntity, filter, pageable)

@@ -1,4 +1,4 @@
-package best.jacknie.finance.common.file.adapter.persistence
+package best.jacknie.finance.common.file.adapter.persistence.fs
 
 import java.io.InputStream
 

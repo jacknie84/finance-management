@@ -1,5 +1,6 @@
 package best.jacknie.finance.common.card.adapter.persistence
 
+import best.jacknie.finance.common.card.adapter.persistence.jpa.CardUsageFileRepository
 import best.jacknie.finance.common.card.application.port.CardUsageFileOutPort
 import best.jacknie.finance.common.card.application.port.SaveCardUsageFile
 import best.jacknie.finance.common.card.domain.CardEntity

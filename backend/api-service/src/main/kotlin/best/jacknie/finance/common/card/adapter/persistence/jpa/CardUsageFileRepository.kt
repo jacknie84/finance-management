@@ -1,4 +1,4 @@
-package best.jacknie.finance.common.card.adapter.persistence
+package best.jacknie.finance.common.card.adapter.persistence.jpa
 
 import best.jacknie.finance.common.card.domain.CardUsageFileEntity
 import org.springframework.data.jpa.repository.JpaRepository

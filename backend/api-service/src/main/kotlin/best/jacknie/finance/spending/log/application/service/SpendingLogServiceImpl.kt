@@ -1,6 +1,5 @@
 package best.jacknie.finance.spending.log.application.service
 
-import best.jacknie.finance.common.user.adapter.export.ExportedUserService
 import best.jacknie.finance.core.web.exception.HttpStatusCodeException
 import best.jacknie.finance.spending.log.application.port.*
 import best.jacknie.finance.spending.log.domain.SpendingLogEntity
@@ -12,7 +11,8 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class SpendingLogServiceImpl(
   private val logOutPort: SpendingLogOutPort,
-  private val userService: ExportedUserService,
+  private val logCardUsageOutPort: SpendingLogCardUsageOutPort,
+  private val userOutPort: UserOutPort,
 ): SpendingLogService {
 
   @Transactional(readOnly = true)
@@ -22,7 +22,7 @@ class SpendingLogServiceImpl(
 
   @Transactional
   override fun createSpendingLog(dto: SaveSpendingLog): SpendingLogEntity {
-    val user = userService.getOrCreateUser(dto.username)
+    val user = userOutPort.getOrCreateUser(dto.username)
     return logOutPort.create(dto, user)
   }
 
@@ -34,19 +34,38 @@ class SpendingLogServiceImpl(
   @Transactional
   override fun putSpendingLog(id: Long, dto: SaveSpendingLog) {
     val entity = getSpendingLog(id)
-    val user = userService.getOrCreateUser(dto.username)
+    val user = userOutPort.getOrCreateUser(dto.username)
     logOutPort.update(entity, dto, user)
   }
 
   @Transactional
   override fun patchSpendingLog(id: Long, dto: PatchSpendingLog) {
     val entity = getSpendingLog(id)
-    val user = dto.username?.let { userService.getOrCreateUser(it) }
+    val user = dto.username?.let { userOutPort.getOrCreateUser(it) }
     logOutPort.update(entity, dto, user)
   }
 
   @Transactional
   override fun deleteSpendingLog(id: Long) {
     logOutPort.delete(id)
+  }
+
+  @Transactional
+  override fun createSpendingLog(dto: SaveSpendingLog, cardId: Long): SpendingLogEntity {
+    val user = userOutPort.getOrCreateUser(dto.username)
+    val entity = logOutPort.create(dto, user)
+    logCardUsageOutPort.create(entity, cardId)
+    return entity
+  }
+
+  @Transactional
+  override fun updateSpendingLog(dto: SaveSpendingLog, cardId: Long): SpendingLogEntity {
+    val logCardUsage = logCardUsageOutPort.findByCardId(cardId)
+    return if (logCardUsage != null) {
+      val user = userOutPort.getOrCreateUser(dto.username)
+      logOutPort.update(logCardUsage.log, dto, user)
+    } else {
+      createSpendingLog(dto, cardId)
+    }
   }
 }

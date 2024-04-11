@@ -1,5 +1,6 @@
 package best.jacknie.finance.spending.log.adapter.persistence
 
+import best.jacknie.finance.spending.log.adapter.persistence.jpa.SpendingLogCardUsageRepository
 import best.jacknie.finance.spending.log.application.port.SpendingLogCardUsageOutPort
 import best.jacknie.finance.spending.log.domain.SpendingLogCardUsageEntity
 import best.jacknie.finance.spending.log.domain.SpendingLogEntity

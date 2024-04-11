@@ -15,4 +15,14 @@ interface FileMetadataOutPort {
    * 파일 메타데이터 조회
    */
   fun findAll(filter: FileMetadataFilter, pageable: Pageable): Page<FileMetadataEntity>
+
+  /**
+   * 파일 메타데이터 조회
+   */
+  fun findById(id: Long): FileMetadataEntity?
+
+  /**
+   * 파일 메타데이터 조회
+   */
+  fun findByKey(fileKey: String): FileMetadataEntity?
 }

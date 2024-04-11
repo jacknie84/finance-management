@@ -1,4 +1,4 @@
-package best.jacknie.finance.spending.log.adapter.persistence
+package best.jacknie.finance.spending.log.adapter.persistence.jpa
 
 import best.jacknie.finance.core.jpa.querydsl.PagingRepositorySupport
 import best.jacknie.finance.spending.log.application.port.SpendingLogsFilter
@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable
 
 @Suppress("unused")
 class SpendingLogCustomRepositoryImpl: PagingRepositorySupport(SpendingLogEntity::class),
-  SpendingLogCustomRepository {
+    SpendingLogCustomRepository {
 
   override fun findAll(filter: SpendingLogsFilter, pageable: Pageable): Page<SpendingLogEntity> {
     return getPage(spendingLogEntity, filter, pageable)

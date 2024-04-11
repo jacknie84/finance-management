@@ -3,7 +3,6 @@ package best.jacknie.finance.common.card.application.service
 import best.jacknie.finance.common.card.application.port.*
 import best.jacknie.finance.common.card.domain.CardUsageEntity
 import best.jacknie.finance.core.web.exception.HttpStatusCodeException
-import best.jacknie.finance.spending.log.adapter.export.ExportedSpendingLogService
 import best.jacknie.finance.spending.log.application.port.SaveSpendingLog
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Page
@@ -15,9 +14,10 @@ import org.springframework.transaction.annotation.Transactional
 class CardUsageServiceImpl(
   private val cardOutPort: CardOutPort,
   private val usageOutPort: CardUsageOutPort,
-  private val logService: ExportedSpendingLogService,
+  private val logOutPort: SpendingLogOutPort,
 ): CardUsageService {
 
+  @Transactional
   override fun createCardUsage(cardId: Long, dto: SaveCardUsage): CardUsageEntity {
     val card = cardOutPort.findById(cardId) ?: throw HttpStatusCodeException.NotFound("카드 정보를 찾을 수 없습니다(cardId: $cardId)")
     try {
@@ -28,7 +28,7 @@ class CardUsageServiceImpl(
         time =  dto.time,
         username = card.user.name,
       )
-      logService.createSpendingLog(log, entity.id!!)
+      logOutPort.createSpendingLog(log, entity.id!!)
       return entity
     } catch (e: DataIntegrityViolationException) {
       throw handleDataIntegrityViolationException(e, dto.approvalNumber)
@@ -44,6 +44,7 @@ class CardUsageServiceImpl(
     }
   }
 
+  @Transactional
   override fun putCardUsage(cardId: Long, id: Long, dto: SaveCardUsage) {
     val entity = usageOutPort.findOne(cardId, id) ?: throw HttpStatusCodeException.NotFound("카드 사용 내역 정보를 찾을 수 없습니다(cardId: $cardId, id: $id)")
     try {
@@ -54,7 +55,7 @@ class CardUsageServiceImpl(
         username = entity.card.user.name,
       )
       usageOutPort.update(entity, dto)
-      logService.updateSpendingLog(log, entity.id!!)
+      logOutPort.updateSpendingLog(log, entity.id!!)
     } catch (e: DataIntegrityViolationException) {
       throw handleDataIntegrityViolationException(e, dto.approvalNumber)
     }

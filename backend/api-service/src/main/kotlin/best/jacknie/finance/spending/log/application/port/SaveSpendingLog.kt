@@ -33,6 +33,7 @@ data class SaveSpendingLog(
   /**
    * 지출 사용자 이름
    */
+  @field:NotBlank
   @field:Size(max = 200)
   var username: String,
 

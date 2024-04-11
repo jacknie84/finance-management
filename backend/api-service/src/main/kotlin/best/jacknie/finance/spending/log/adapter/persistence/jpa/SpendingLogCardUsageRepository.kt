@@ -1,4 +1,4 @@
-package best.jacknie.finance.spending.log.adapter.persistence
+package best.jacknie.finance.spending.log.adapter.persistence.jpa
 
 import best.jacknie.finance.spending.log.domain.SpendingLogCardUsageEntity
 import org.springframework.data.jpa.repository.JpaRepository

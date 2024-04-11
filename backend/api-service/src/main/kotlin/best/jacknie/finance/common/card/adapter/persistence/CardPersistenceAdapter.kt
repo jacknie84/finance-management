@@ -1,5 +1,6 @@
 package best.jacknie.finance.common.card.adapter.persistence
 
+import best.jacknie.finance.common.card.adapter.persistence.jpa.CardRepository
 import best.jacknie.finance.common.card.application.port.CardOutPort
 import best.jacknie.finance.common.card.application.port.PatchCard
 import best.jacknie.finance.common.card.application.port.SaveCard
@@ -14,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class CardPersistenceAdapter(
-  private val cardRepository: CardRepository,
-  private val entityManager: EntityManager,
+    private val cardRepository: CardRepository,
+    private val entityManager: EntityManager,
 ): CardOutPort {
 
   @Transactional(readOnly = true)

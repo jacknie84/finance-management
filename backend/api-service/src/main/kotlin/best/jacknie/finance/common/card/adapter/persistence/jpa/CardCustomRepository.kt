@@ -1,4 +1,4 @@
-package best.jacknie.finance.common.card.adapter.persistence
+package best.jacknie.finance.common.card.adapter.persistence.jpa
 
 interface CardCustomRepository {
 

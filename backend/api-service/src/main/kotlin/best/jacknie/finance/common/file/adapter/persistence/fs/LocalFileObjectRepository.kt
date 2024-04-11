@@ -1,4 +1,4 @@
-package best.jacknie.finance.common.file.adapter.persistence
+package best.jacknie.finance.common.file.adapter.persistence.fs
 
 import best.jacknie.finance.common.file.domain.FilePolicy
 import org.springframework.beans.factory.annotation.Value

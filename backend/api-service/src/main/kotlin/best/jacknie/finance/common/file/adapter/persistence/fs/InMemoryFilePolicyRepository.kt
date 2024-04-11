@@ -1,4 +1,4 @@
-package best.jacknie.finance.common.file.adapter.persistence
+package best.jacknie.finance.common.file.adapter.persistence.fs
 
 import best.jacknie.finance.common.file.domain.FilePolicy
 import best.jacknie.finance.core.file.config.FileProperties

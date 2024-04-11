@@ -1,4 +1,4 @@
-package best.jacknie.finance.common.card.adapter.persistence
+package best.jacknie.finance.common.card.adapter.persistence.jpa
 
 import best.jacknie.finance.common.card.domain.CardEntity
 import best.jacknie.finance.common.card.domain.QCardEntity.cardEntity

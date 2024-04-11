@@ -2,6 +2,7 @@ package best.jacknie.finance.common.file.application.service
 
 import best.jacknie.finance.common.file.application.port.*
 import best.jacknie.finance.common.file.domain.FileMetadataEntity
+import best.jacknie.finance.common.file.domain.FileObject
 import best.jacknie.finance.core.web.exception.HttpStatusCodeException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -25,5 +26,13 @@ class FileServiceImpl(
   @Transactional(readOnly = true)
   override fun getFileMetadataPage(filter: FileMetadataFilter, pageable: Pageable): Page<FileMetadataEntity> {
     return fileMetadataOutPort.findAll(filter, pageable)
+  }
+
+  override fun findFileObject(id: Long): FileObject? {
+    return fileObjectOutPort.findByMetadataId(id)
+  }
+
+  override fun findFileMetadata(fileKey: String): FileMetadataEntity? {
+    return fileMetadataOutPort.findByKey(fileKey)
   }
 }

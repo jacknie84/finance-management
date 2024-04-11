@@ -1,4 +1,4 @@
-package best.jacknie.finance.spending.log.adapter.persistence
+package best.jacknie.finance.spending.log.adapter.persistence.jpa
 
 import best.jacknie.finance.spending.log.application.port.SpendingLogsFilter
 import best.jacknie.finance.spending.log.domain.SpendingLogEntity

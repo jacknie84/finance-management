@@ -5,7 +5,7 @@ import best.jacknie.finance.common.card.application.port.CardService
 import best.jacknie.finance.common.card.application.port.PatchCard
 import best.jacknie.finance.common.card.application.port.SaveCard
 import best.jacknie.finance.common.card.domain.CardEntity
-import best.jacknie.finance.common.user.adapter.export.ExportedUserService
+import best.jacknie.finance.common.user.adapter.export.UserExportedService
 import best.jacknie.finance.core.web.exception.HttpStatusCodeException
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Page
@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CardServiceImpl(
-  private val cardOutPort: CardOutPort,
-  private val userService: ExportedUserService,
+    private val cardOutPort: CardOutPort,
+    private val userService: UserExportedService,
 ): CardService {
 
   override fun createCard(dto: SaveCard): CardEntity {

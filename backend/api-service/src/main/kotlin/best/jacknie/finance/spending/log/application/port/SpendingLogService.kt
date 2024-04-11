@@ -35,4 +35,14 @@ interface SpendingLogService {
    * 지출 내역 삭제 처리
    */
   fun deleteSpendingLog(id: Long)
+
+  /**
+   * 지출 내역 생성 처리
+   */
+  fun createSpendingLog(dto: SaveSpendingLog, cardId: Long): SpendingLogEntity
+
+  /**
+   * 지출 내역 수정 처리
+   */
+  fun updateSpendingLog(dto: SaveSpendingLog, cardId: Long): SpendingLogEntity
 }

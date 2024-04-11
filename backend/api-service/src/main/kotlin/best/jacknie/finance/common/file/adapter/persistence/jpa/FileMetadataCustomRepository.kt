@@ -1,4 +1,4 @@
-package best.jacknie.finance.common.file.adapter.persistence
+package best.jacknie.finance.common.file.adapter.persistence.jpa
 
 import best.jacknie.finance.common.file.application.port.FileMetadataFilter
 import best.jacknie.finance.common.file.domain.FileMetadataEntity

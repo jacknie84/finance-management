@@ -1,4 +1,4 @@
-package best.jacknie.finance.common.card.adapter.persistence
+package best.jacknie.finance.common.card.adapter.persistence.jpa
 
 import best.jacknie.finance.common.card.domain.CardUsageFileEntity
 import best.jacknie.finance.common.card.domain.QCardUsageFileEntity.cardUsageFileEntity
@@ -7,7 +7,8 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 @Suppress("unused")
-class CardUsageFileCustomRepositoryImpl: PagingRepositorySupport(CardUsageFileEntity::class), CardUsageFileCustomRepository {
+class CardUsageFileCustomRepositoryImpl: PagingRepositorySupport(CardUsageFileEntity::class),
+    CardUsageFileCustomRepository {
 
   override fun findAll(cardId: Long, pageable: Pageable): Page<CardUsageFileEntity> {
     return getPage(cardUsageFileEntity, pageable) { cardUsageFileEntity.card.id.eq(cardId) }
