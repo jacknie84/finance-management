@@ -1,6 +1,6 @@
 package best.jacknie.finance.common.card.application.service.internal.model
 
-import best.jacknie.finance.common.card.application.port.RawCardUsage
+import best.jacknie.finance.spending.log.application.port.RawCardUsage
 import best.jacknie.finance.common.file.domain.FileObject
 
 interface CardUsageParser {

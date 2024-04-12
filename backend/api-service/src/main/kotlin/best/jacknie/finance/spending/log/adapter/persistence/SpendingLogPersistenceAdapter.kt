@@ -2,10 +2,7 @@ package best.jacknie.finance.spending.log.adapter.persistence
 
 import best.jacknie.finance.common.user.domain.UserEntity
 import best.jacknie.finance.spending.log.adapter.persistence.jpa.SpendingLogRepository
-import best.jacknie.finance.spending.log.application.port.PatchSpendingLog
-import best.jacknie.finance.spending.log.application.port.SaveSpendingLog
-import best.jacknie.finance.spending.log.application.port.SpendingLogOutPort
-import best.jacknie.finance.spending.log.application.port.SpendingLogsFilter
+import best.jacknie.finance.spending.log.application.port.*
 import best.jacknie.finance.spending.log.domain.SpendingLogEntity
 import best.jacknie.finance.spending.log.domain.SpendingTime
 import org.springframework.data.domain.Page
@@ -32,8 +29,31 @@ class SpendingLogPersistenceAdapter(
   }
 
   @Transactional
+  override fun create(dto: SaveCardUsage, user: UserEntity): SpendingLogEntity {
+    val entity = SpendingLogEntity(
+      summary = dto.merchant,
+      amount = dto.amount,
+      time = getSpendingTime(dto.time),
+      user = user,
+    )
+    return logRepository.save(entity)
+  }
+
+  @Transactional
   override fun update(entity: SpendingLogEntity, dto: SaveSpendingLog, user: UserEntity): SpendingLogEntity {
     entity.apply {
+      summary = dto.summary
+      amount = dto.amount
+      time = getSpendingTime(dto.time)
+      this.user = user
+    }
+    return logRepository.save(entity)
+  }
+
+  @Transactional
+  override fun update(entity: SpendingLogEntity, dto: SaveCardUsage, user: UserEntity): SpendingLogEntity {
+    entity.apply {
+      summary = dto.merchant
       amount = dto.amount
       time = getSpendingTime(dto.time)
       this.user = user

@@ -30,4 +30,5 @@ interface CardService {
    * 카드 정보 수정 처리
    */
   fun patchCard(id: Long, dto: PatchCard)
+
 }

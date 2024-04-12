@@ -1,16 +1,16 @@
-package best.jacknie.finance.spending.log.adapter.proxy
+package best.jacknie.finance.common.card.adapter.proxy
 
+import best.jacknie.finance.common.card.application.port.UserOutPort
 import best.jacknie.finance.common.user.adapter.export.UserExportedService
 import best.jacknie.finance.common.user.domain.UserEntity
-import best.jacknie.finance.spending.log.application.port.UserOutPort
 import org.springframework.stereotype.Component
 
-@Component("cardUserProxyAdapter")
+@Component("spendingLogUserProxyAdapter")
 class UserProxyAdapter(
-  private val userService: UserExportedService,
+  private val userExportedService: UserExportedService,
 ): UserOutPort {
 
   override fun getOrCreateUser(username: String): UserEntity {
-    return userService.getOrCreateUser(username)
+    return userExportedService.getOrCreateUser(username)
   }
 }

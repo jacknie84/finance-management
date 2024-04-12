@@ -1,11 +1,7 @@
 package best.jacknie.finance.common.card.application.service
 
-import best.jacknie.finance.common.card.application.port.CardOutPort
-import best.jacknie.finance.common.card.application.port.CardService
-import best.jacknie.finance.common.card.application.port.PatchCard
-import best.jacknie.finance.common.card.application.port.SaveCard
+import best.jacknie.finance.common.card.application.port.*
 import best.jacknie.finance.common.card.domain.CardEntity
-import best.jacknie.finance.common.user.adapter.export.UserExportedService
 import best.jacknie.finance.core.web.exception.HttpStatusCodeException
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Page
@@ -16,11 +12,12 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class CardServiceImpl(
     private val cardOutPort: CardOutPort,
-    private val userService: UserExportedService,
+    private val userOutPort: UserOutPort,
 ): CardService {
 
+  @Transactional
   override fun createCard(dto: SaveCard): CardEntity {
-    val user = userService.getOrCreateUser(dto.username)
+    val user = userOutPort.getOrCreateUser(dto.username)
     try {
       return cardOutPort.create(dto, user)
     } catch (e: DataIntegrityViolationException) {
@@ -35,12 +32,13 @@ class CardServiceImpl(
 
   @Transactional(readOnly = true)
   override fun getCard(id: Long): CardEntity {
-    return cardOutPort.findById(id) ?: throw HttpStatusCodeException.NotFound("카드 정보를 찾을 수 없습니다(id: $id)")
+    return cardOutPort.findById(id) ?: notFound(id)
   }
 
+  @Transactional
   override fun putCard(id: Long, dto: SaveCard) {
     val entity = getCard(id)
-    val user = userService.getOrCreateUser(dto.username)
+    val user = userOutPort.getOrCreateUser(dto.username)
     try {
       cardOutPort.update(entity, dto, user)
     } catch (e: DataIntegrityViolationException) {
@@ -48,15 +46,18 @@ class CardServiceImpl(
     }
   }
 
+  @Transactional
   override fun patchCard(id: Long, dto: PatchCard) {
     val entity = getCard(id)
-    val user = dto.username?.let { userService.getOrCreateUser(it) }
+    val user = dto.username?.let { userOutPort.getOrCreateUser(it) }
     try {
       cardOutPort.update(entity, dto, user)
     } catch (e: DataIntegrityViolationException) {
       throw handleDataIntegrityViolationException(e, dto.number)
     }
   }
+
+  private fun notFound(id: Long): Nothing = throw HttpStatusCodeException.NotFound("카드 정보를 찾을 수 없습니다(id: $id)")
 
   private fun handleDataIntegrityViolationException(e: DataIntegrityViolationException, number: String?): HttpStatusCodeException {
     return if (number != null && cardOutPort.existsByNumber(number)) {

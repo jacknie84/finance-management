@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional
 class SpendingLogServiceImpl(
   private val logOutPort: SpendingLogOutPort,
   private val logTagOutPort: SpendingLogTagOutPort,
-  private val logCardUsageOutPort: SpendingLogCardUsageOutPort,
   private val userOutPort: UserOutPort,
 ): SpendingLogService {
 
@@ -59,28 +58,6 @@ class SpendingLogServiceImpl(
   override fun deleteSpendingLog(id: Long) {
     logTagOutPort.deleteAllByLogId(id)
     logOutPort.delete(id)
-  }
-
-  @Transactional
-  override fun createSpendingLog(dto: SaveSpendingLog, cardId: Long): SpendingLog {
-    val user = userOutPort.getOrCreateUser(dto.username)
-    val log = logOutPort.create(dto, user)
-    val tags = logTagOutPort.replaceAll(log, dto.tags)
-    logCardUsageOutPort.create(log, cardId)
-    return toSpendingLog(log, tags)
-  }
-
-  @Transactional
-  override fun updateSpendingLog(dto: SaveSpendingLog, cardId: Long): SpendingLog {
-    val logCardUsage = logCardUsageOutPort.findByCardId(cardId)
-    return if (logCardUsage != null) {
-      val user = userOutPort.getOrCreateUser(dto.username)
-      val log = logOutPort.update(logCardUsage.log, dto, user)
-      val tags = logTagOutPort.replaceAll(log, dto.tags)
-      toSpendingLog(log, tags)
-    } else {
-      createSpendingLog(dto, cardId)
-    }
   }
 
   @Transactional(readOnly = true)

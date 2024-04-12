@@ -1,8 +1,8 @@
 package best.jacknie.finance.common.card.application.service.internal.domain
 
-import best.jacknie.finance.common.card.application.port.RawCardUsage
+import best.jacknie.finance.spending.log.application.port.RawCardUsage
 import best.jacknie.finance.common.card.application.service.internal.model.CardUsageParser
-import best.jacknie.finance.common.card.domain.CardUsageStatus
+import best.jacknie.finance.spending.log.domain.CardUsageStatus
 import best.jacknie.finance.common.file.domain.FileObject
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 import org.apache.poi.ss.usermodel.Row
