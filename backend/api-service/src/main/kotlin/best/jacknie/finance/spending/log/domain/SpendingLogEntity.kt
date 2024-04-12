@@ -17,18 +17,18 @@ data class SpendingLogEntity(
   var id: Long? = null,
 
   /**
-   * 소비 내용
+   * 지출 내용
    */
   var summary: String? = null,
 
   /**
-   * 소비 금액
+   * 지출 금액
    */
   @Column(nullable = false)
   var amount: Int,
 
   /**
-   * 소비 시간
+   * 지출 시간
    */
   @Embedded
   @AttributeOverrides(value = [
@@ -41,17 +41,6 @@ data class SpendingLogEntity(
     AttributeOverride(name = "hour", column = Column(name = "timeHour", nullable = false)),
   ])
   var time: SpendingTime,
-
-  /**
-   * 태그 목록
-   */
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(
-    name = "${TABLE_PREFIX}spring_log_tag",
-    joinColumns = [JoinColumn(name = "logId", referencedColumnName = "id")]
-  )
-  @Column(name = "tag", nullable = false)
-  var tags: MutableSet<String>? = null,
 
   /**
    * 지출 사용자 정보

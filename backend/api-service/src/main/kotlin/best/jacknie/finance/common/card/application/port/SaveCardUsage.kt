@@ -25,13 +25,13 @@ data class SaveCardUsage(
   var status: CardUsageStatus,
 
   /**
-   * 소비 금액
+   * 지출 금액
    */
   @field:Positive
   var amount: Int,
 
   /**
-   * 소비 시간
+   * 지출 시간
    */
   var time: ZonedDateTime,
 )

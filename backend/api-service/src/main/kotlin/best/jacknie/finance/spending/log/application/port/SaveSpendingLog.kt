@@ -9,19 +9,19 @@ import java.time.ZonedDateTime
 data class SaveSpendingLog(
 
   /**
-   * 소비 내용
+   * 지출 내용
    */
   @field:Size(max = 200)
   var summary: String,
 
   /**
-   * 소비 금액
+   * 지출 금액
    */
   @field:Positive
   var amount: Int,
 
   /**
-   * 소비 시간
+   * 지출 시간
    */
   var time: ZonedDateTime,
 

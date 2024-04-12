@@ -9,13 +9,13 @@ import java.time.ZonedDateTime
 data class PatchSpendingLog(
 
   /**
-   * 소비 금액
+   * 지출 금액
    */
   @field:Positive
   var amount: Int? = null,
 
   /**
-   * 소비 시간
+   * 지출 시간
    */
   var time: ZonedDateTime? = null,
 

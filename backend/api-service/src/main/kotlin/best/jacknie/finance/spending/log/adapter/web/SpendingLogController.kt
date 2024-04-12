@@ -13,7 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder
 @RestController
 @RequestMapping("/v1/spending/logs")
 class SpendingLogController(
-  private val logService: SpendingLogService
+  private val logService: SpendingLogService,
 ) {
 
   @PostMapping

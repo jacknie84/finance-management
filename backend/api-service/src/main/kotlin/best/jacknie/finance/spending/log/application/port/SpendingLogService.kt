@@ -9,17 +9,17 @@ interface SpendingLogService {
   /**
    * 지출 내역 생성 처리
    */
-  fun createSpendingLog(dto: SaveSpendingLog): SpendingLogEntity
+  fun createSpendingLog(dto: SaveSpendingLog): SpendingLog
 
   /**
    * 지출 내역 목록 페이지 조회
    */
-  fun getSpendingLogsPage(filter: SpendingLogsFilter, pageable: Pageable): Page<SpendingLogEntity>
+  fun getSpendingLogsPage(filter: SpendingLogsFilter, pageable: Pageable): Page<SpendingLog>
 
   /**
    * 지출 내역 조회
    */
-  fun getSpendingLog(id: Long): SpendingLogEntity
+  fun getSpendingLog(id: Long): SpendingLog
 
   /**
    * 지출 내역 수정 처리
@@ -39,10 +39,15 @@ interface SpendingLogService {
   /**
    * 지출 내역 생성 처리
    */
-  fun createSpendingLog(dto: SaveSpendingLog, cardId: Long): SpendingLogEntity
+  fun createSpendingLog(dto: SaveSpendingLog, cardId: Long): SpendingLog
 
   /**
    * 지출 내역 수정 처리
    */
-  fun updateSpendingLog(dto: SaveSpendingLog, cardId: Long): SpendingLogEntity
+  fun updateSpendingLog(dto: SaveSpendingLog, cardId: Long): SpendingLog
+
+  /**
+   * 지출 내역 태그 프리셋 조회
+   */
+  fun getSpendingLogsPreset(): SpendingLogTagsPreset
 }

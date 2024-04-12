@@ -26,7 +26,6 @@ class SpendingLogPersistenceAdapter(
       summary = dto.summary,
       amount = dto.amount,
       time = getSpendingTime(dto.time),
-      tags = dto.tags,
       user = user,
     )
     return logRepository.save(entity)
@@ -37,7 +36,6 @@ class SpendingLogPersistenceAdapter(
     entity.apply {
       amount = dto.amount
       time = getSpendingTime(dto.time)
-      tags = dto.tags
       this.user = user
     }
     return logRepository.save(entity)
@@ -48,7 +46,6 @@ class SpendingLogPersistenceAdapter(
     entity.apply {
       dto.amount?.let { amount = it }
       dto.time?.let { time = getSpendingTime(it) }
-      dto.tags?.let { tags = it }
       user?.let { this.user = it }
     }
     return logRepository.save(entity)
