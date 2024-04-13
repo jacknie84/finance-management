@@ -39,7 +39,7 @@ data class CardUsageEntity(
    * 카드 내역 파일
    */
   @ManyToOne
-  @JoinColumn(name = "fielId", referencedColumnName = "id")
+  @JoinColumn(name = "fileId", referencedColumnName = "id")
   var file: CardUsageFileEntity,
 
   /**
