@@ -17,6 +17,11 @@ interface CardUsageService {
   fun getCardUsagesPage(cardId: Long, filter: CardUsagesFilter, pageable: Pageable): Page<CardUsageEntity>
 
   /**
+   * 카드 사용 내역 목록 페이지 조회
+   */
+  fun getCardUsagesPage(filter: CardUsagesFilter, pageable: Pageable): Page<CardUsageEntity>
+
+  /**
    * 카드 사용 내역 수정 처리
    */
   fun putCardUsage(cardId: Long, id: Long, dto: SaveCardUsage)

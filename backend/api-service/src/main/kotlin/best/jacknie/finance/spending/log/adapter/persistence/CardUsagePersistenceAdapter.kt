@@ -57,6 +57,11 @@ class CardUsagePersistenceAdapter(
     return usageRepository.findAll(cardId, filter, pageable)
   }
 
+  @Transactional(readOnly = true)
+  override fun findAll(filter: CardUsagesFilter, pageable: Pageable): Page<CardUsageEntity> {
+    return usageRepository.findAll(filter, pageable)
+  }
+
   private fun save(entity: CardUsageEntity): CardUsageEntity {
     try {
       return usageRepository.save(entity)

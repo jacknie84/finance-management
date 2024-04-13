@@ -36,6 +36,11 @@ class CardUsageServiceImpl(
     return usageOutPort.findAll(cardId, filter, pageable)
   }
 
+  @Transactional(readOnly = true)
+  override fun getCardUsagesPage(filter: CardUsagesFilter, pageable: Pageable): Page<CardUsageEntity> {
+    return usageOutPort.findAll(filter, pageable)
+  }
+
   @Transactional
   override fun putCardUsage(cardId: Long, id: Long, dto: SaveCardUsage) {
     val usage = usageOutPort.findOne(cardId, id) ?: notFound(cardId, id)

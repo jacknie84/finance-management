@@ -21,4 +21,9 @@ interface CardUsageCustomRepository {
    * 카드 사용 내역 목록 페이지 조회
    */
   fun findAll(cardId: Long, filter: CardUsagesFilter, pageable: Pageable): Page<CardUsageEntity>
+
+  /**
+   * 카드 사용 내역 목록 페이지 조회
+   */
+  fun findAll(filter: CardUsagesFilter, pageable: Pageable): Page<CardUsageEntity>
 }

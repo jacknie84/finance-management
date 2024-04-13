@@ -14,9 +14,9 @@ import java.time.Month
 data class SpendingLogsFilter(
 
   /**
-   * 요약 검색 목록
+   * 검색 목록
    */
-  var containsSummary: Set<String>?,
+  var search001: Set<String>?,
 
   /**
    * 연도 목록
@@ -42,7 +42,7 @@ data class SpendingLogsFilter(
 
   override val predicate: Predicate? get() {
     return allOf(
-      anyOf(containsSummary?.map { spendingLogEntity.summary.containsIgnoreCase(it) } ?: emptySet<Predicate>()),
+      anyOf(search001?.map { spendingLogEntity.summary.containsIgnoreCase(it) } ?: emptySet<Predicate>()),
       year?.let { spendingLogEntity.time.year.`in`(it) },
       month?.let { spendingLogEntity.time.month.`in`(it) },
       dayOfMonth?.let { spendingLogEntity.time.dayOfMonth.`in`(it) },
