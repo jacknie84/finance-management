@@ -1,6 +1,5 @@
 package best.jacknie.finance.spending.log.domain
 
-import best.jacknie.finance.common.card.domain.CardEntity
 import best.jacknie.finance.core.jpa.auditing.AuditingEntity
 import best.jacknie.finance.core.jpa.metadata.TABLE_PREFIX
 import jakarta.persistence.*

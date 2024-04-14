@@ -1,6 +1,8 @@
 package best.jacknie.finance.spending.log.application.port
 
 import best.jacknie.finance.common.user.domain.UserEntity
+import best.jacknie.finance.spending.log.domain.SpendingLogEntity
+import best.jacknie.finance.spending.log.domain.SpendingLogTagEntity
 import java.time.Instant
 
 data class SpendingLog(
@@ -34,4 +36,19 @@ data class SpendingLog(
    * 사용자
    */
   val user: UserEntity,
-)
+) {
+
+  companion object {
+
+    fun from(log: SpendingLogEntity, tags: List<SpendingLogTagEntity>?): SpendingLog {
+      return SpendingLog(
+        id = log.id!!,
+        summary = log.summary,
+        amount = log.amount,
+        time = log.time.instant,
+        tags = tags?.map { it.tag }?.toSet(),
+        user = log.user
+      )
+    }
+  }
+}

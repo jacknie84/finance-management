@@ -20,7 +20,7 @@ class SpendingLogServiceImpl(
   override fun getSpendingLogsPage(filter: SpendingLogsFilter, pageable: Pageable): Page<SpendingLog> {
     val page = logOutPort.findAll(filter, pageable)
     val tagsMap = getSpendingLogTagsMap(page)
-    return page.map { toSpendingLog(it, tagsMap[it.id!!]) }
+    return page.map { SpendingLog.from(it, tagsMap[it.id!!]) }
   }
 
   @Transactional
@@ -28,14 +28,14 @@ class SpendingLogServiceImpl(
     val user = userOutPort.getOrCreateUser(dto.username)
     val log =  logOutPort.create(dto, user)
     val tags = logTagOutPort.replaceAll(log, dto.tags)
-    return toSpendingLog(log, tags)
+    return SpendingLog.from(log, tags)
   }
 
   @Transactional
   override fun getSpendingLog(id: Long): SpendingLog {
     val log = logOutPort.findById(id) ?: notFound(id)
     val tags = logTagOutPort.findAllByLogId(log.id!!)
-    return toSpendingLog(log, tags)
+    return SpendingLog.from(log, tags)
   }
 
   @Transactional
@@ -72,17 +72,6 @@ class SpendingLogServiceImpl(
     }
     val ids = page.map { it.id!! }.toSet()
     return logTagOutPort.getMapByLogId(ids)
-  }
-
-  private fun toSpendingLog(log: SpendingLogEntity, tags: List<SpendingLogTagEntity>?): SpendingLog {
-    return SpendingLog(
-      id = log.id!!,
-      summary = log.summary,
-      amount = log.amount,
-      time = log.time.instant,
-      tags = tags?.map { it.tag }?.toSet(),
-      user = log.user
-    )
   }
 
   private fun notFound(id: Long): Nothing = throw HttpStatusCodeException.NotFound("지출 내역을 찾을 수 없습니다(id: $id)")

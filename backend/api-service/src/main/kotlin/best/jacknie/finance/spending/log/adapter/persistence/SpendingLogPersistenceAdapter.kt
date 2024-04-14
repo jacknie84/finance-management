@@ -32,7 +32,7 @@ class SpendingLogPersistenceAdapter(
   override fun create(dto: SaveCardUsage, user: UserEntity): SpendingLogEntity {
     val entity = SpendingLogEntity(
       summary = dto.merchant,
-      amount = dto.amount,
+      amount = if (dto.status.positive) dto.amount else -(dto.amount),
       time = getSpendingTime(dto.time),
       user = user,
     )
@@ -54,7 +54,7 @@ class SpendingLogPersistenceAdapter(
   override fun update(entity: SpendingLogEntity, dto: SaveCardUsage, user: UserEntity): SpendingLogEntity {
     entity.apply {
       summary = dto.merchant
-      amount = dto.amount
+      amount = if (dto.status.positive) dto.amount else -(dto.amount)
       time = getSpendingTime(dto.time)
       this.user = user
     }

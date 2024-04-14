@@ -22,7 +22,7 @@ class CardUsageFileController(
     uri: UriComponentsBuilder
   ): ResponseEntity<*> {
     val entity = fileService.createCardUsageFile(cardId, dto)
-    val location = uri.path("/{id}").buildAndExpand(entity.id).toUri()
+    val location = uri.path("/v1/cards/{cardId}/usage/files/{id}").buildAndExpand(cardId, entity.id).toUri()
     return ResponseEntity.created(location).build<Any>()
   }
 

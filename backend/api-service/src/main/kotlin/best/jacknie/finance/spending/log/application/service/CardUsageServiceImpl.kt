@@ -2,7 +2,6 @@ package best.jacknie.finance.spending.log.application.service
 
 import best.jacknie.finance.core.web.exception.HttpStatusCodeException
 import best.jacknie.finance.spending.log.application.port.*
-import best.jacknie.finance.spending.log.domain.CardUsageEntity
 import best.jacknie.finance.spending.log.domain.CardUsageFileEntity
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Page
@@ -14,31 +13,44 @@ import org.springframework.transaction.annotation.Transactional
 class CardUsageServiceImpl(
   private val usageOutPort: CardUsageOutPort,
   private val logOutPort: SpendingLogOutPort,
+  private val logTagOutPort: SpendingLogTagOutPort,
   private val cardOutPort: CardOutPort,
   private val fileOutPort: CardUsageFileOutPort,
 ): CardUsageService {
 
   @Transactional
-  override fun createCardUsage(cardId: Long, dto: SaveCardUsage): CardUsageEntity {
+  override fun createCardUsage(cardId: Long, dto: SaveCardUsage): CardUsage {
     val card = cardOutPort.getCard(cardId)
     try {
       val log = logOutPort.create(dto, card.user)
       val file = getCardUsageFile(cardId, dto.fileId)
-      return usageOutPort.create(dto, file, log)
+      val usage = usageOutPort.create(dto, file, log)
+      val tags = if (dto.tags.isNullOrEmpty()) {
+        logTagOutPort.findAllByLogId(log.id!!)
+      } else {
+        logTagOutPort.replaceAll(log, dto.tags)
+      }
+      return CardUsage.from(usage, tags)
     } catch (e: DataIntegrityViolationException) {
       throw handleDataIntegrityViolationException(e, dto.approvalNumber)
     }
   }
 
   @Transactional(readOnly = true)
-  override fun getCardUsagesPage(cardId: Long, filter: CardUsagesFilter, pageable: Pageable): Page<CardUsageEntity> {
+  override fun getCardUsagesPage(cardId: Long, filter: CardUsagesFilter, pageable: Pageable): Page<CardUsage> {
     cardOutPort.getCard(cardId)
-    return usageOutPort.findAll(cardId, filter, pageable)
+    val page = usageOutPort.findAll(cardId, filter, pageable)
+    val logIds = page.map { it.log.id!! }.toSet()
+    val tagsMap = logTagOutPort.getMapByLogId(logIds)
+    return page.map { CardUsage.from(it, tagsMap[it.log.id!!]) }
   }
 
   @Transactional(readOnly = true)
-  override fun getCardUsagesPage(filter: CardUsagesFilter, pageable: Pageable): Page<CardUsageEntity> {
-    return usageOutPort.findAll(filter, pageable)
+  override fun getCardUsagesPage(filter: CardUsagesFilter, pageable: Pageable): Page<CardUsage> {
+    val page = usageOutPort.findAll(filter, pageable)
+    val logIds = page.map { it.log.id!! }.toSet()
+    val tagsMap = logTagOutPort.getMapByLogId(logIds)
+    return page.map { CardUsage.from(it, tagsMap[it.log.id!!]) }
   }
 
   @Transactional
@@ -46,8 +58,13 @@ class CardUsageServiceImpl(
     val usage = usageOutPort.findOne(cardId, id) ?: notFound(cardId, id)
     try {
       val file = getCardUsageFile(cardId, dto.fileId)
-      logOutPort.update(usage.log, dto, file.card.user)
+      val log = logOutPort.update(usage.log, dto, file.card.user)
       usageOutPort.update(usage, dto, file)
+      if (dto.tags.isNullOrEmpty()) {
+        logTagOutPort.findAllByLogId(log.id!!)
+      } else {
+        logTagOutPort.replaceAll(log, dto.tags)
+      }
     } catch (e: DataIntegrityViolationException) {
       throw handleDataIntegrityViolationException(e, dto.approvalNumber)
     }

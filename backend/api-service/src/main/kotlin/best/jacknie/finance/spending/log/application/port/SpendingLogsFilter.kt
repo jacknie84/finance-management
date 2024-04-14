@@ -2,9 +2,12 @@ package best.jacknie.finance.spending.log.application.port
 
 import best.jacknie.finance.core.jpa.querydsl.PredicateProvider
 import best.jacknie.finance.spending.log.domain.QSpendingLogEntity.spendingLogEntity
+import best.jacknie.finance.spending.log.domain.QSpendingLogTagEntity.spendingLogTagEntity
 import com.querydsl.core.types.ExpressionUtils.allOf
 import com.querydsl.core.types.ExpressionUtils.anyOf
 import com.querydsl.core.types.Predicate
+import com.querydsl.core.types.dsl.BooleanExpression
+import com.querydsl.jpa.JPAExpressions.selectOne
 import jakarta.validation.constraints.Max
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.Positive
@@ -42,7 +45,17 @@ data class SpendingLogsFilter(
 
   override val predicate: Predicate? get() {
     return allOf(
-      anyOf(search001?.map { spendingLogEntity.summary.containsIgnoreCase(it) } ?: emptySet<Predicate>()),
+      search001
+        ?.map {
+          spendingLogEntity.summary.containsIgnoreCase(it)
+            .or(selectOne().from(spendingLogTagEntity)
+              .where(
+                spendingLogTagEntity.log.eq(spendingLogEntity),
+                spendingLogTagEntity.tag.containsIgnoreCase(it),
+              )
+              .exists())
+        }
+        ?.reduce(BooleanExpression::or),
       year?.let { spendingLogEntity.time.year.`in`(it) },
       month?.let { spendingLogEntity.time.month.`in`(it) },
       dayOfMonth?.let { spendingLogEntity.time.dayOfMonth.`in`(it) },

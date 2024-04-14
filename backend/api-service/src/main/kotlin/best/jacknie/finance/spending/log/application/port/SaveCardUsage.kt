@@ -1,10 +1,7 @@
 package best.jacknie.finance.spending.log.application.port
 
 import best.jacknie.finance.spending.log.domain.CardUsageStatus
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.Pattern
-import jakarta.validation.constraints.Positive
-import jakarta.validation.constraints.Size
+import jakarta.validation.constraints.*
 import java.time.ZonedDateTime
 
 data class SaveCardUsage(
@@ -29,7 +26,7 @@ data class SaveCardUsage(
   /**
    * 지출 금액
    */
-  @field:Positive
+  @field:PositiveOrZero
   var amount: Int,
 
   /**
