@@ -1,14 +1,18 @@
-import moment from "moment"
+import moment, { Moment, MomentInput } from "moment"
 import numeral from "numeral"
 
-export function formatMoney(amount?: number) {
-  return amount ? numeral(amount).format("0,0") : "-"
+export function formatMoney(amount?: number, defaultValue: string = "-") {
+  return amount ? numeral(amount).format("0,0") : defaultValue
 }
 
-export function formatDate(dateTime?: string) {
-  return dateTime ? moment(dateTime).format("YYYY-MM-DD") : "-"
+export function parseMoney(value?: string) {
+  return value ? numeral(value).value() : NaN
 }
 
-export function formatTime(dateTime?: string) {
-  return dateTime ? moment(dateTime).format("HH:mm:ss") : "-"
+export function formatDate(dateTime?: MomentInput | Moment, defaultValue: string = "-") {
+  return dateTime ? moment(dateTime).format("YYYY-MM-DD") : defaultValue
+}
+
+export function formatTime(dateTime?: MomentInput | Moment, defaultValue: string = "-") {
+  return dateTime ? moment(dateTime).format("HH:mm") : defaultValue
 }

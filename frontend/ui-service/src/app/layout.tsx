@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation"
 import { Providers } from "@/components/Providers"
+import SystemModal from "@/components/SystemModal"
 import "@/styles/globals.css"
 import type { Metadata } from "next"
 
@@ -15,6 +16,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Providers>
           <Navigation />
           {children}
+          <SystemModal />
         </Providers>
       </body>
     </html>

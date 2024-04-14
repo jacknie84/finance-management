@@ -1,3 +1,5 @@
-import { debounce, isEmpty } from "lodash"
+import { debounce, isEmpty, uniq } from "lodash"
 
-export { debounce, isEmpty }
+const distinct = uniq
+
+export { debounce, distinct, isEmpty }

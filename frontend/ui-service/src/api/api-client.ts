@@ -1,16 +1,17 @@
 import { isEmpty } from "@/lib/utils"
+import HttpStatusCodeError from "./HttpStatusCodeError"
 import { PageRequest } from "./types"
 
-const baseUrl = "http://localhost:8080/v1"
+export const baseUrl = "http://localhost:8080/v1"
 
 const apiClient = {
   async get<O>(path: string, query?: string) {
     return await exchange<any, O>({ line: { method: "get", url: `${baseUrl}/${path}`, query } })
   },
-  async post<I, O>(path: string, body: I) {
+  async post<I, O = unknown>(path: string, body: I) {
     return await exchange<I, O>({ line: { method: "post", url: `${baseUrl}/${path}` }, entity: { body } })
   },
-  async put<I, O>(path: string, body: I) {
+  async put<I, O = unknown>(path: string, body: I) {
     return await exchange<I, O>({ line: { method: "put", url: `${baseUrl}/${path}` }, entity: { body } })
   },
   async patch<I, O>(path: string, body: I) {
@@ -46,9 +47,14 @@ function buildRequest<I>(request: Request<I>) {
 }
 
 async function buildResponse<O>(response: globalThis.Response) {
-  const headers = isEmpty(response.headers) ? {} : buildResponseHeaders(response.headers)
-  const body = await response.json()
-  return { status: response.status, entity: { headers, body } } as Response<O>
+  const headers = buildResponseHeaders(response.headers)
+  const body = ![201, 204].includes(response.status) && (await response.json())
+  const divided = Math.floor(response.status / 100)
+  if (divided === 2) {
+    return { status: response.status, entity: { headers, body } } as Response<O>
+  } else {
+    throw new HttpStatusCodeError(response.status, body)
+  }
 }
 
 function buildResponseHeaders(headers: Headers) {

@@ -1,6 +1,5 @@
 "use client"
 
-import { BrandLogo } from "@/components/BrandLogo"
 import {
   BreadcrumbItem,
   Breadcrumbs,
@@ -14,16 +13,24 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@nextui-org/react"
+import { usePathname } from "next/navigation"
 import { useState } from "react"
+import { BrandLogo } from "./BrandLogo"
 
 const menuItems = ["내정보", "홈화면", "수입내역", "수입통계", "지출내역", "지출통계", "지출계획", "로그아웃"]
+const navbarItems = [
+  { label: "수입", key: "income" },
+  { label: "지출", key: "spending" },
+  { label: "통계", key: "statistics" },
+]
 
 export default function Navigation() {
+  const pathname = usePathname()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
     <div className="mb-8">
-      <Navbar onMenuOpenChange={setIsMenuOpen} isBordered>
+      <Navbar isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} isBordered>
         <NavbarContent>
           <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} className="sm:hidden" />
           <NavbarBrand>
@@ -33,21 +40,19 @@ export default function Navigation() {
         </NavbarContent>
 
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
-          <NavbarItem>
-            <Link color="foreground" href="#">
-              수입
-            </Link>
-          </NavbarItem>
-          <NavbarItem isActive>
-            <Link href="#" aria-current="page">
-              지출
-            </Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link color="foreground" href="#">
-              통계
-            </Link>
-          </NavbarItem>
+          {navbarItems.map(({ key, label }) => (
+            <NavbarItem key={key} isActive={pathname.includes(key)}>
+              {pathname.includes(key) ? (
+                <Link href={`/${key}`} aria-current="page">
+                  {label}
+                </Link>
+              ) : (
+                <Link color="foreground" href={`/${key}`}>
+                  {label}
+                </Link>
+              )}
+            </NavbarItem>
+          ))}
         </NavbarContent>
 
         <NavbarContent justify="end">
