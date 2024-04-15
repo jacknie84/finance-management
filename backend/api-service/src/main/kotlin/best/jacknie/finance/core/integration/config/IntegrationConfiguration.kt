@@ -1,4 +1,4 @@
-package best.jacknie.finance.core.integration
+package best.jacknie.finance.core.integration.config
 
 import best.jacknie.finance.core.BeanNames
 import org.springframework.context.annotation.Bean
