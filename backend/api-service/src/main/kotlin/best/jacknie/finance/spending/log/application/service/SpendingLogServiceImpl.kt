@@ -60,12 +60,6 @@ class SpendingLogServiceImpl(
     logOutPort.delete(id)
   }
 
-  @Transactional(readOnly = true)
-  override fun getSpendingLogsPreset(): SpendingLogTagsPreset {
-    val tags = logTagOutPort.findAllPreset()
-    return SpendingLogTagsPreset(tags)
-  }
-
   private fun getSpendingLogTagsMap(page: Page<SpendingLogEntity>): Map<Long, List<SpendingLogTagEntity>> {
     if (page.isEmpty) {
       return emptyMap()
