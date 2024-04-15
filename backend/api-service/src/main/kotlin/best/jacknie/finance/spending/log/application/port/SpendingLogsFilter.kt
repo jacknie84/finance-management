@@ -45,17 +45,22 @@ data class SpendingLogsFilter(
 
   override val predicate: Predicate? get() {
     return allOf(
-      search001
-        ?.map {
-          spendingLogEntity.summary.containsIgnoreCase(it)
-            .or(selectOne().from(spendingLogTagEntity)
+      anyOf(
+        search001
+          ?.map { spendingLogEntity.summary.containsIgnoreCase(it) }
+          ?.reduce(BooleanExpression::or),
+        search001
+          ?.let {
+            selectOne().from(spendingLogTagEntity)
               .where(
                 spendingLogTagEntity.log.eq(spendingLogEntity),
-                spendingLogTagEntity.tag.containsIgnoreCase(it),
+                it
+                  .map { search -> spendingLogTagEntity.tag.containsIgnoreCase(search) }
+                  .reduce(BooleanExpression::or),
               )
-              .exists())
-        }
-        ?.reduce(BooleanExpression::or),
+              .exists()
+          }
+      ),
       year?.let { spendingLogEntity.time.year.`in`(it) },
       month?.let { spendingLogEntity.time.month.`in`(it) },
       dayOfMonth?.let { spendingLogEntity.time.dayOfMonth.`in`(it) },
