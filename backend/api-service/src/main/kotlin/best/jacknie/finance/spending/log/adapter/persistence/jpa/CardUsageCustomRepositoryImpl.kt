@@ -32,6 +32,6 @@ class CardUsageCustomRepositoryImpl: PagingRepositorySupport(CardUsageEntity::cl
   }
 
   override fun findAll(filter: CardUsagesFilter, pageable: Pageable): Page<CardUsageEntity> {
-    return getPage(cardUsageEntity, pageable) { filter.predicate }
+    return getPage(cardUsageEntity, filter, pageable)
   }
 }
