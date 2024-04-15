@@ -1,5 +1,6 @@
 package best.jacknie.finance.spending.log.adapter.web
 
+import best.jacknie.finance.spending.log.application.port.CardUsageMessagingGateway
 import best.jacknie.finance.spending.log.application.port.CardUsageService
 import best.jacknie.finance.spending.log.application.port.CardUsagesFilter
 import best.jacknie.finance.spending.log.application.port.SaveCardUsage
@@ -12,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder
 @RestController
 @RequestMapping("/v1/cards/{cardId}/usages")
 class CardUsageController(
+  private val usageMessagingGateway: CardUsageMessagingGateway,
   private val usageService: CardUsageService
 ) {
 
@@ -21,8 +23,8 @@ class CardUsageController(
     @RequestBody @Valid dto: SaveCardUsage,
     uri: UriComponentsBuilder
   ): ResponseEntity<*> {
-    val entity = usageService.createCardUsage(cardId, dto)
-    val location = uri.path("/{id}").buildAndExpand(cardId, entity.id).toUri()
+    val usage = usageMessagingGateway.createCardUsage(cardId, dto)
+    val location = uri.path("/v1/cards/{cardId}/usages/{id}").buildAndExpand(cardId, usage.id).toUri()
     return ResponseEntity.created(location).build<Any>()
   }
 
@@ -42,7 +44,7 @@ class CardUsageController(
     @PathVariable("id") id: Long,
     @RequestBody @Valid dto: SaveCardUsage,
   ): ResponseEntity<*> {
-    usageService.putCardUsage(cardId, id, dto)
+    usageMessagingGateway.putCardUsage(cardId, id, dto)
     return ResponseEntity.noContent().build<Any>()
   }
 }

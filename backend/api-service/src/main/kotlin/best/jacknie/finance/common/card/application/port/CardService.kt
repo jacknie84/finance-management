@@ -24,11 +24,11 @@ interface CardService {
   /**
    * 카드 정보 수정 처리
    */
-  fun putCard(id: Long, dto: SaveCard)
+  fun putCard(id: Long, dto: SaveCard): CardEntity
 
   /**
    * 카드 정보 수정 처리
    */
-  fun patchCard(id: Long, dto: PatchCard)
+  fun patchCard(id: Long, dto: PatchCard): CardEntity
 
 }

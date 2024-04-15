@@ -15,7 +15,6 @@ class CardServiceImpl(
     private val userOutPort: UserOutPort,
 ): CardService {
 
-  @Transactional
   override fun createCard(dto: SaveCard): CardEntity {
     val user = userOutPort.getOrCreateUser(dto.username)
     try {
@@ -35,23 +34,21 @@ class CardServiceImpl(
     return cardOutPort.findById(id) ?: notFound(id)
   }
 
-  @Transactional
-  override fun putCard(id: Long, dto: SaveCard) {
+  override fun putCard(id: Long, dto: SaveCard): CardEntity {
     val entity = getCard(id)
     val user = userOutPort.getOrCreateUser(dto.username)
     try {
-      cardOutPort.update(entity, dto, user)
+      return cardOutPort.update(entity, dto, user)
     } catch (e: DataIntegrityViolationException) {
       throw handleDataIntegrityViolationException(e, dto.number)
     }
   }
 
-  @Transactional
-  override fun patchCard(id: Long, dto: PatchCard) {
+  override fun patchCard(id: Long, dto: PatchCard): CardEntity {
     val entity = getCard(id)
     val user = dto.username?.let { userOutPort.getOrCreateUser(it) }
     try {
-      cardOutPort.update(entity, dto, user)
+      return cardOutPort.update(entity, dto, user)
     } catch (e: DataIntegrityViolationException) {
       throw handleDataIntegrityViolationException(e, dto.number)
     }

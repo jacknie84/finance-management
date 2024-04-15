@@ -54,17 +54,18 @@ class CardUsageServiceImpl(
   }
 
   @Transactional
-  override fun putCardUsage(cardId: Long, id: Long, dto: SaveCardUsage) {
-    val usage = usageOutPort.findOne(cardId, id) ?: notFound(cardId, id)
+  override fun putCardUsage(cardId: Long, id: Long, dto: SaveCardUsage): CardUsage {
+    var usage = usageOutPort.findOne(cardId, id) ?: notFound(cardId, id)
     try {
       val file = getCardUsageFile(cardId, dto.fileId)
       val log = logOutPort.update(usage.log, dto, file.card.user)
-      usageOutPort.update(usage, dto, file)
-      if (dto.tags.isNullOrEmpty()) {
+      usage = usageOutPort.update(usage, dto, file)
+      val tags = if (dto.tags.isNullOrEmpty()) {
         logTagOutPort.findAllByLogId(log.id!!)
       } else {
         logTagOutPort.replaceAll(log, dto.tags)
       }
+      return CardUsage.from(usage, tags)
     } catch (e: DataIntegrityViolationException) {
       throw handleDataIntegrityViolationException(e, dto.approvalNumber)
     }

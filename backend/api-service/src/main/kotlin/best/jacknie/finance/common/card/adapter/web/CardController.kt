@@ -1,5 +1,6 @@
 package best.jacknie.finance.common.card.adapter.web
 
+import best.jacknie.finance.common.card.application.port.CardMessagingGateway
 import best.jacknie.finance.common.card.application.port.CardService
 import best.jacknie.finance.common.card.application.port.PatchCard
 import best.jacknie.finance.common.card.application.port.SaveCard
@@ -12,13 +13,14 @@ import org.springframework.web.util.UriComponentsBuilder
 @RestController
 @RequestMapping("/v1/cards")
 class CardController(
-  private val cardService: CardService
+  private val cardMessagingGateway: CardMessagingGateway,
+  private val cardService: CardService,
 ) {
 
   @PostMapping
   fun createCard(@RequestBody @Valid dto: SaveCard, uri: UriComponentsBuilder): ResponseEntity<*> {
-    val entity = cardService.createCard(dto)
-    val location = uri.path("/{id}").buildAndExpand(entity.id).toUri()
+    val entity = cardMessagingGateway.createCard(dto)
+    val location = uri.path("/v1/cards/{id}").buildAndExpand(entity.id).toUri()
     return ResponseEntity.created(location).build<Any>()
   }
 
@@ -36,13 +38,13 @@ class CardController(
 
   @PutMapping("/{id}")
   fun putCard(@PathVariable("id") id: Long, @RequestBody @Valid dto: SaveCard): ResponseEntity<*> {
-    cardService.putCard(id, dto)
+    cardMessagingGateway.putCard(id, dto)
     return ResponseEntity.noContent().build<Any>()
   }
 
   @PatchMapping("/{id}")
   fun patchCard(@PathVariable("id") id: Long, @RequestBody @Valid dto: PatchCard): ResponseEntity<*> {
-    cardService.patchCard(id, dto)
+    cardMessagingGateway.patchCard(id, dto)
     return ResponseEntity.noContent().build<Any>()
   }
 }
