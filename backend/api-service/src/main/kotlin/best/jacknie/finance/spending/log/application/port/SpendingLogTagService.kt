@@ -5,5 +5,5 @@ interface SpendingLogTagService {
   /**
    * 지출 내역 태그 프리셋 조회
    */
-  fun getSpendingLogsPreset(): SpendingLogTagsPreset
+  fun getSpendingLogTagsPreset(): SpendingLogTagsPreset
 }

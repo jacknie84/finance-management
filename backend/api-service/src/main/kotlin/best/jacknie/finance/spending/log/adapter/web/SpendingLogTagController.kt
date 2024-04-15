@@ -14,7 +14,7 @@ class SpendingLogTagController(
 
   @GetMapping("/preset")
   fun getSpendingLogsPreset(): ResponseEntity<*> {
-    val preset = tagService.getSpendingLogsPreset()
+    val preset = tagService.getSpendingLogTagsPreset()
     return ResponseEntity.ok(preset)
   }
 }

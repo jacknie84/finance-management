@@ -12,7 +12,7 @@ class SpendingLogTagServiceImpl(
 ): SpendingLogTagService {
 
   @Transactional(readOnly = true)
-  override fun getSpendingLogsPreset(): SpendingLogTagsPreset {
+  override fun getSpendingLogTagsPreset(): SpendingLogTagsPreset {
     val tags = logTagOutPort.findAllPreset()
     return SpendingLogTagsPreset(tags)
   }
