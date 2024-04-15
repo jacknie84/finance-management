@@ -1,5 +1,6 @@
 package best.jacknie.finance.common.user.adapter.persistence
 
+import best.jacknie.finance.common.user.adapter.persistence.jpa.UserRepository
 import best.jacknie.finance.common.user.application.port.UserOutPort
 import best.jacknie.finance.common.user.domain.UserEntity
 import org.springframework.data.domain.Page
