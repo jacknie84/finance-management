@@ -1,13 +1,15 @@
 "use client"
 
-import { SpendingLog, SpendingLogsFilter, getSpendingLogsPage } from "@/api/spending/log"
+import { SpendingLog, getSpendingLogsPage } from "@/api/spending/log"
 import { Page, PageRequest } from "@/api/types"
 import Container from "@/components/Container"
+import PeriodSearchForm from "@/components/Form/PeriodSearchForm"
+import SearchInput from "@/components/Form/SearchInput"
 import Money from "@/components/Money"
-import SearchTable from "@/components/SearchTable"
+import PagingTable from "@/components/PagingTable"
+import PlusIcon from "@/components/icons/PlusIcon"
 import { formatDate, formatTime } from "@/lib/format"
-import { debounce } from "@/lib/utils"
-import { Link } from "@nextui-org/react"
+import { Button, Card, CardBody, Link } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
 import { createColumnHelper } from "@tanstack/react-table"
 import { useRouter } from "next/navigation"
@@ -35,28 +37,43 @@ const columns = [
 ]
 
 type Props = { pageRequest: PageRequest; page?: Page<SpendingLog> }
+type Period = { start?: string; end?: string }
 
 export default function SpendingLogs(props: Props) {
   const [pageRequest, setPageRequest] = useState<PageRequest>(props.pageRequest)
-  const [filter, setFilter] = useState<SpendingLogsFilter>({})
+  const [period, setPeriod] = useState<Period>({})
+  const [search, setSearch] = useState<string>()
   const { data: page = props.page, isPending } = useQuery({
-    queryKey: ["getSpendingLogsPage", filter, pageRequest],
-    queryFn: () => getSpendingLogsPage(filter, pageRequest),
+    queryKey: ["getSpendingLogsPage", search, period, pageRequest],
+    queryFn: () => getSpendingLogsPage({ search001: search ? [search] : [], ...period }, pageRequest),
   })
   const router = useRouter()
 
   return (
     <Container>
-      <SearchTable
-        columns={columns}
-        isLoading={isPending}
-        page={page?.pageable.pageNumber}
-        total={page?.totalPages}
-        content={{ items: page?.content ?? [], total: page?.totalElements ?? 0 }}
-        onSearchValueChange={debounce((value: string) => setFilter({ search001: value ? [value] : [] }), 300)}
-        onPageRequest={(pageRequest) => setPageRequest({ ...props.pageRequest, ...pageRequest })}
-        onClickAddButton={() => router.push("logs/form")}
-      />
+      <div className="flex flex-col gap-4">
+        <Card>
+          <CardBody>
+            <div className="flex flex-col gap-4">
+              <PeriodSearchForm onChange={setPeriod} />
+              <div className="flex justify-between gap-3 items-end">
+                <SearchInput onValueChange={setSearch} />
+                <Button color="primary" endContent={<PlusIcon />} onClick={() => router.push("logs/form")}>
+                  추가
+                </Button>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+        <PagingTable
+          columns={columns}
+          isLoading={isPending}
+          page={page?.pageable.pageNumber}
+          total={page?.totalPages}
+          content={{ items: page?.content ?? [], total: page?.totalElements ?? 0 }}
+          onPageRequest={(pageRequest) => setPageRequest({ ...props.pageRequest, ...pageRequest })}
+        />
+      </div>
     </Container>
   )
 }

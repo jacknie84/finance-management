@@ -46,6 +46,8 @@ export type SpendingLog = {
 
 export type SpendingLogsFilter = {
   search001?: string[]
+  start?: string
+  end?: string
 }
 
 export type SaveSpendingLog = {
