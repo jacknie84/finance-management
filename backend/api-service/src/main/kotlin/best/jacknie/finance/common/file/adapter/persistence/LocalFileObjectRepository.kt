@@ -1,5 +1,7 @@
-package best.jacknie.finance.common.file.adapter.persistence.fs
+package best.jacknie.finance.common.file.adapter.persistence
 
+import best.jacknie.finance.common.file.application.port.FileObjectRepository
+import best.jacknie.finance.common.file.application.port.LoadedFile
 import best.jacknie.finance.common.file.domain.FilePolicy
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType

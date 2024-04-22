@@ -1,6 +1,5 @@
-package best.jacknie.finance.common.file.adapter.persistence.jpa
+package best.jacknie.finance.common.file.application.port
 
-import best.jacknie.finance.common.file.application.port.FileMetadataFilter
 import best.jacknie.finance.common.file.domain.FileMetadataEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

@@ -1,5 +1,6 @@
-package best.jacknie.finance.common.file.adapter.persistence.fs
+package best.jacknie.finance.common.file.adapter.persistence
 
+import best.jacknie.finance.common.file.application.port.FilePolicyRepository
 import best.jacknie.finance.common.file.domain.FilePolicy
 import best.jacknie.finance.core.file.config.FileProperties
 import org.springframework.stereotype.Repository

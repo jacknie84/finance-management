@@ -1,4 +1,4 @@
-package best.jacknie.finance.common.file.adapter.persistence.jpa
+package best.jacknie.finance.common.file.application.port
 
 import best.jacknie.finance.common.file.domain.FileMetadataEntity
 import org.springframework.data.jpa.repository.JpaRepository
