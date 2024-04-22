@@ -40,13 +40,4 @@ class CardUsageFileController(
     val fileObject = fileService.getCardUsageFileObject(cardId, id)
     return ResponseEntity.ok().binary(fileObject)
   }
-
-  @GetMapping("/{id}/parsing")
-  fun getCardUsages(
-    @PathVariable("cardId") cardId: Long,
-    @PathVariable("id") id: Long,
-  ): ResponseEntity<*> {
-    val usages = fileService.getCardUsages(cardId, id)
-    return ResponseEntity.ok(usages)
-  }
 }

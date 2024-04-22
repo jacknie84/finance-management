@@ -1,7 +1,7 @@
 package best.jacknie.finance.spending.log.application.port
 
-import best.jacknie.finance.spending.log.domain.CardUsageFileEntity
 import best.jacknie.finance.common.file.domain.FileObject
+import best.jacknie.finance.spending.log.domain.CardUsageFileEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
@@ -21,9 +21,4 @@ interface CardUsageFileService {
    * 카드 사용 내역 업로드 파일 내용 조회
    */
   fun getCardUsageFileObject(cardId: Long, id: Long): FileObject
-
-  /**
-   * 카드 사용 내역 파일 분석 결과 조회
-   */
-  fun getCardUsages(cardId: Long, id: Long): List<RawCardUsage>
 }

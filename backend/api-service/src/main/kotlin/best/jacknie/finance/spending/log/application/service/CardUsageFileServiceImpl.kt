@@ -1,6 +1,5 @@
 package best.jacknie.finance.spending.log.application.service
 
-import best.jacknie.finance.common.card.application.service.internal.model.CardUsageParser
 import best.jacknie.finance.common.file.domain.FileObject
 import best.jacknie.finance.core.web.exception.HttpStatusCodeException
 import best.jacknie.finance.spending.log.application.port.*
@@ -15,7 +14,6 @@ class CardUsageFileServiceImpl(
   private val cardClient: CardClient,
   private val fileRepository: CardUsageFileRepository,
   private val fileClient: FileClient,
-  private val usageParser: CardUsageParser,
 ): CardUsageFileService {
 
   @Transactional
@@ -43,12 +41,6 @@ class CardUsageFileServiceImpl(
     val usageFile =  fileRepository.findByCardIdAndId(cardId, id) ?: notFound(cardId, id)
     val metadata = fileClient.findFileMetadata(usageFile.fileKey) ?: conflict(usageFile.fileKey)
     return fileClient.findFileObject(metadata.id!!) ?: conflict(metadata.id!!)
-  }
-
-  @Transactional(readOnly = true)
-  override fun getCardUsages(cardId: Long, id: Long): List<RawCardUsage> {
-    val fileObject = getCardUsageFileObject(cardId, id)
-    return usageParser.getCardUsages(fileObject)
   }
 
   private fun notFound(cardId: Long, id: Long): Nothing = throw throw HttpStatusCodeException.NotFound("카드 사용 내역 파일을 찾을 수 없습니다(cardId: $cardId, id: $id)")
