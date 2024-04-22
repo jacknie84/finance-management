@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Component
 class CardPersistenceAdapter(
-    private val cardRepository: CardRepository,
-    private val entityManager: EntityManager,
+  private val cardRepository: CardRepository,
+  private val entityManager: EntityManager,
 ): CardOutPort {
 
   @Transactional(readOnly = true)

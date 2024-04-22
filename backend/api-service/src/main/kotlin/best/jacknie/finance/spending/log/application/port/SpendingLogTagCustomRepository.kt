@@ -1,4 +1,4 @@
-package best.jacknie.finance.spending.log.adapter.persistence.jpa
+package best.jacknie.finance.spending.log.application.port
 
 interface SpendingLogTagCustomRepository {
 

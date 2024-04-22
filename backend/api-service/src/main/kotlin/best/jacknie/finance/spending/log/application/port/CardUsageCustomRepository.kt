@@ -1,16 +1,10 @@
-package best.jacknie.finance.spending.log.adapter.persistence.jpa
+package best.jacknie.finance.spending.log.application.port
 
-import best.jacknie.finance.spending.log.application.port.CardUsagesFilter
 import best.jacknie.finance.spending.log.domain.CardUsageEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface CardUsageCustomRepository {
-
-  /**
-   * 승인 번호로 카드 사용 내역 조회 여부 확인
-   */
-  fun existsByApprovalNumber(approvalNumber: String): Boolean
 
   /**
    * 카드 사용 내역 조회

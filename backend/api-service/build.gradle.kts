@@ -24,7 +24,7 @@ repositories {
 dependencies {
   kapt("com.querydsl:querydsl-apt::jakarta")
   developmentOnly("org.springframework.boot:spring-boot-devtools")
-  runtimeOnly("com.h2database:h2")
+  implementation("com.h2database:h2")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springframework.boot:spring-boot-starter")
   implementation("org.springframework.boot:spring-boot-starter-web")
@@ -42,6 +42,7 @@ tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs += "-Xjsr305=strict"
     freeCompilerArgs += "-Xemit-jvm-type-annotations"
+    freeCompilerArgs += "-Xjvm-default=all"
 		jvmTarget = "21"
 	}
 }

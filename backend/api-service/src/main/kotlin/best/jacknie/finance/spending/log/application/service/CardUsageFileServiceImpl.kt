@@ -12,33 +12,37 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CardUsageFileServiceImpl(
-  private val cardOutPort: CardOutPort,
-  private val cardUsageFileOutPort: CardUsageFileOutPort,
-  private val fileOutPort: FileOutPort,
+  private val cardClient: CardClient,
+  private val fileRepository: CardUsageFileRepository,
+  private val fileClient: FileClient,
   private val usageParser: CardUsageParser,
 ): CardUsageFileService {
 
   @Transactional
   override fun createCardUsageFile(cardId: Long, dto: SaveCardUsageFile): CardUsageFileEntity {
-    val card = cardOutPort.getCard(cardId)
+    val card = cardClient.getCard(cardId)
     if (dto.policy != "card-usage") {
       throw HttpStatusCodeException.BadRequest("지원 하지 않는 파일 정책 이름 입니다(${dto.policy})")
-    } else {
-      return cardUsageFileOutPort.create(dto, card)
     }
+    val usage = CardUsageFileEntity(
+      description = dto.description,
+      fileKey = dto.fileKey,
+      card = card,
+    )
+    return fileRepository.save(usage)
   }
 
   @Transactional(readOnly = true)
   override fun getCardUsageFilesPage(cardId: Long, pageable: Pageable): Page<CardUsageFileEntity> {
-    cardOutPort.getCard(cardId)
-    return cardUsageFileOutPort.findAll(cardId, pageable)
+    cardClient.getCard(cardId)
+    return fileRepository.findAll(cardId, pageable)
   }
 
   @Transactional(readOnly = true)
   override fun getCardUsageFileObject(cardId: Long, id: Long): FileObject {
-    val usageFile = cardUsageFileOutPort.findOne(cardId, id) ?: notFound(cardId, id)
-    val metadata = fileOutPort.findFileMetadata(usageFile.fileKey) ?: conflict(usageFile.fileKey)
-    return fileOutPort.findFileObject(metadata.id!!) ?: conflict(metadata.id!!)
+    val usageFile =  fileRepository.findByCardIdAndId(cardId, id) ?: notFound(cardId, id)
+    val metadata = fileClient.findFileMetadata(usageFile.fileKey) ?: conflict(usageFile.fileKey)
+    return fileClient.findFileObject(metadata.id!!) ?: conflict(metadata.id!!)
   }
 
   @Transactional(readOnly = true)

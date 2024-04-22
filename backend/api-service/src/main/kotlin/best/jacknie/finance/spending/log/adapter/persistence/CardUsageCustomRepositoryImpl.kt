@@ -1,22 +1,17 @@
-package best.jacknie.finance.spending.log.adapter.persistence.jpa
+package best.jacknie.finance.spending.log.adapter.persistence
 
 import best.jacknie.finance.spending.log.application.port.CardUsagesFilter
 import best.jacknie.finance.spending.log.domain.CardUsageEntity
 import best.jacknie.finance.core.jpa.querydsl.PagingRepositorySupport
+import best.jacknie.finance.spending.log.application.port.CardUsageCustomRepository
 import best.jacknie.finance.spending.log.domain.QCardUsageEntity.cardUsageEntity
 import com.querydsl.core.types.ExpressionUtils.allOf
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.stereotype.Repository
 
-@Suppress("unused")
+@Repository("cardUsageRepositoryImpl")
 class CardUsageCustomRepositoryImpl: PagingRepositorySupport(CardUsageEntity::class), CardUsageCustomRepository {
-
-  override fun existsByApprovalNumber(approvalNumber: String): Boolean {
-    val id = from(cardUsageEntity).select(cardUsageEntity.id)
-      .where(cardUsageEntity.approvalNumber.eq(approvalNumber))
-      .fetchFirst()
-    return id != null
-  }
 
   override fun findByCardIdAndId(cardId: Long, id: Long): CardUsageEntity? {
     return from(cardUsageEntity)

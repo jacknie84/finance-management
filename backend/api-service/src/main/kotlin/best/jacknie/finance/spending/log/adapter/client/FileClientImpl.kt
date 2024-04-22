@@ -1,15 +1,15 @@
-package best.jacknie.finance.spending.log.adapter.proxy
+package best.jacknie.finance.spending.log.adapter.client
 
-import best.jacknie.finance.spending.log.application.port.FileOutPort
 import best.jacknie.finance.common.file.adapter.export.FileExportedService
 import best.jacknie.finance.common.file.domain.FileMetadataEntity
 import best.jacknie.finance.common.file.domain.FileObject
+import best.jacknie.finance.spending.log.application.port.FileClient
 import org.springframework.stereotype.Component
 
 @Component
-class FileProxyAdapter(
+class FileClientImpl(
   private val fileExportedService: FileExportedService,
-): FileOutPort {
+): FileClient {
 
   override fun findFileObject(id: Long): FileObject? {
     return fileExportedService.findFileObject(id)

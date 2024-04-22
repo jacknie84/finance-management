@@ -1,6 +1,5 @@
-package best.jacknie.finance.spending.log.adapter.persistence.jpa
+package best.jacknie.finance.spending.log.application.port
 
-import best.jacknie.finance.spending.log.application.port.SpendingLogsFilter
 import best.jacknie.finance.spending.log.domain.SpendingLogEntity
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
