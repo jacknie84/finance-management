@@ -6,19 +6,19 @@ export const baseUrl = "http://localhost:8080/v1"
 
 const apiClient = {
   async get<O>(path: string, query?: string) {
-    return await exchange<any, O>({ line: { method: "get", url: `${baseUrl}/${path}`, query } })
+    return await exchange<any, O>({ line: { method: "GET", url: `${baseUrl}/${path}`, query } })
   },
   async post<I, O = unknown>(path: string, body: I) {
-    return await exchange<I, O>({ line: { method: "post", url: `${baseUrl}/${path}` }, entity: { body } })
+    return await exchange<I, O>({ line: { method: "POST", url: `${baseUrl}/${path}` }, entity: { body } })
   },
   async put<I, O = unknown>(path: string, body: I) {
-    return await exchange<I, O>({ line: { method: "put", url: `${baseUrl}/${path}` }, entity: { body } })
+    return await exchange<I, O>({ line: { method: "PUT", url: `${baseUrl}/${path}` }, entity: { body } })
   },
-  async patch<I, O>(path: string, body: I) {
-    return await exchange<I, O>({ line: { method: "patch", url: `${baseUrl}/${path}` }, entity: { body } })
+  async patch<I, O = unknown>(path: string, body: I) {
+    return await exchange<I, O>({ line: { method: "PATCH", url: `${baseUrl}/${path}` }, entity: { body } })
   },
   async delete<O>(path: string, query?: string) {
-    return await exchange<any, O>({ line: { method: "delete", url: `${baseUrl}/${path}`, query } })
+    return await exchange<any, O>({ line: { method: "DELETE", url: `${baseUrl}/${path}`, query } })
   },
 }
 
@@ -74,7 +74,7 @@ type Response<T = any> = {
 }
 
 type RequestLine = {
-  method: "get" | "post" | "put" | "patch" | "delete"
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
   url: string
   query?: string
 }

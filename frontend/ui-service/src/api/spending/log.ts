@@ -31,6 +31,10 @@ export async function putSpendingLog(id: string | number, log: SaveSpendingLog) 
   await apiClient.put<SaveSpendingLog>(`${path}/${id}`, log)
 }
 
+export async function patchSpendingLog(id: string | number, log: PatchSpendingLog) {
+  await apiClient.patch<PatchSpendingLog>(`${path}/${id}`, log)
+}
+
 export async function deleteSpendingLog(id: string | number) {
   await apiClient.delete<SaveSpendingLog>(`${path}/${id}`)
 }
@@ -57,3 +61,5 @@ export type SaveSpendingLog = {
   tags: string[]
   username: string
 }
+
+export type PatchSpendingLog = Partial<SaveSpendingLog>
