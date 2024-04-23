@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import formFactory from "./factory"
 
-export async function saveSpendingLog(id?: string | number, _prev: unknown, formData: FormData) {
+export async function saveSpendingLog(id: string | number | undefined, _prev: unknown, formData: FormData) {
   const result = await formFactory.validateFormData(formData)
   if (isEmpty(result.errors)) {
     var log = {

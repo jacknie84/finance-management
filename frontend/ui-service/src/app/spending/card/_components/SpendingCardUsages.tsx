@@ -1,12 +1,13 @@
 "use client"
 
-import { CardUsage, CardUsagesFilter, getCardUsagesPage } from "@/api/spending/card"
+import { CardUsage, getCardUsagesPage } from "@/api/spending/card"
 import { Page, PageRequest } from "@/api/types"
 import Container from "@/components/Container"
+import SearchAndAdd from "@/components/Form/SearchAndAdd"
 import Money from "@/components/Money"
-import SearchTable from "@/components/SearchTable"
+import PagingTable from "@/components/PagingTable"
 import { formatDate, formatTime } from "@/lib/format"
-import { debounce } from "@/lib/utils"
+import { Period } from "@/types"
 import { Link } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
 import { createColumnHelper } from "@tanstack/react-table"
@@ -42,25 +43,27 @@ type Props = { pageRequest: PageRequest; page?: Page<CardUsage> }
 
 export default function SpendingCardUsages(props: Props) {
   const [pageRequest, setPageRequest] = useState<PageRequest>(props.pageRequest)
-  const [filter, setFilter] = useState<CardUsagesFilter>({})
+  const [period, setPeriod] = useState<Period>({})
+  const [search, setSearch] = useState<string>()
   const { data: page = props.page, isPending } = useQuery({
-    queryKey: ["getCardUsagesPage", filter, pageRequest],
-    queryFn: () => getCardUsagesPage(filter, pageRequest),
+    queryKey: ["getCardUsagesPage", search, period, pageRequest],
+    queryFn: () => getCardUsagesPage({ search001: search ? [search] : [], ...period }, pageRequest),
   })
   const router = useRouter()
 
   return (
     <Container>
-      <SearchTable
-        columns={columns}
-        isLoading={isPending}
-        page={page?.pageable.pageNumber}
-        total={page?.totalPages}
-        content={{ items: page?.content ?? [], total: page?.totalElements ?? 0 }}
-        onSearchValueChange={debounce((value: string) => setFilter({ search001: value ? [value] : [] }), 300)}
-        onPageRequest={(pageRequest) => setPageRequest({ ...props.pageRequest, ...pageRequest })}
-        onClickAddButton={() => router.push("card/form")}
-      />
+      <div className="flex flex-col gap-4">
+        <SearchAndAdd onPeriodChange={setPeriod} onSearchChang={setSearch} onClickAdd={() => router.push("card/form")} />
+        <PagingTable
+          columns={columns}
+          isLoading={isPending}
+          page={page?.pageable.pageNumber}
+          total={page?.totalPages}
+          content={{ items: page?.content ?? [], total: page?.totalElements ?? 0 }}
+          onPageRequest={(pageRequest) => setPageRequest({ ...props.pageRequest, ...pageRequest })}
+        />
+      </div>
     </Container>
   )
 }

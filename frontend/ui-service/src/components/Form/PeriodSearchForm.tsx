@@ -1,12 +1,13 @@
 import { formatDate, formatTime, parseDate, parseTime } from "@/lib/format"
 import { isEmpty } from "@/lib/utils"
+import { Period } from "@/types"
 import { Button } from "@nextui-org/react"
 import moment, { DurationInputArg1, DurationInputArg2, Moment } from "moment"
 import { useCallback, useState } from "react"
 import DateInput from "./DateInput"
 import TimeInput from "./TimeInput"
 
-type Events = { onChange: (period: { start?: string; end?: string }) => void }
+type Events = { onChange: (period: Period) => void }
 type Props = {} & Events
 type LocalDate = { year: number; month: number; day: number }
 type LocalTime = { hour: number; minute: number }

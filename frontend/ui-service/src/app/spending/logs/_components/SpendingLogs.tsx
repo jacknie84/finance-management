@@ -3,13 +3,12 @@
 import { SpendingLog, getSpendingLogsPage } from "@/api/spending/log"
 import { Page, PageRequest } from "@/api/types"
 import Container from "@/components/Container"
-import PeriodSearchForm from "@/components/Form/PeriodSearchForm"
-import SearchInput from "@/components/Form/SearchInput"
+import SearchAndAdd from "@/components/Form/SearchAndAdd"
 import Money from "@/components/Money"
 import PagingTable from "@/components/PagingTable"
-import PlusIcon from "@/components/icons/PlusIcon"
 import { formatDate, formatTime } from "@/lib/format"
-import { Button, Card, CardBody, Link } from "@nextui-org/react"
+import { Period } from "@/types"
+import { Link } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
 import { createColumnHelper } from "@tanstack/react-table"
 import { useRouter } from "next/navigation"
@@ -37,7 +36,6 @@ const columns = [
 ]
 
 type Props = { pageRequest: PageRequest; page?: Page<SpendingLog> }
-type Period = { start?: string; end?: string }
 
 export default function SpendingLogs(props: Props) {
   const [pageRequest, setPageRequest] = useState<PageRequest>(props.pageRequest)
@@ -52,19 +50,7 @@ export default function SpendingLogs(props: Props) {
   return (
     <Container>
       <div className="flex flex-col gap-4">
-        <Card>
-          <CardBody>
-            <div className="flex flex-col gap-4">
-              <PeriodSearchForm onChange={setPeriod} />
-              <div className="flex justify-between gap-3 items-end">
-                <SearchInput onValueChange={setSearch} />
-                <Button color="primary" endContent={<PlusIcon />} onClick={() => router.push("logs/form")}>
-                  추가
-                </Button>
-              </div>
-            </div>
-          </CardBody>
-        </Card>
+        <SearchAndAdd onPeriodChange={setPeriod} onSearchChang={setSearch} onClickAdd={() => router.push("logs/form")} />
         <PagingTable
           columns={columns}
           isLoading={isPending}
