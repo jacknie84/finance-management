@@ -33,7 +33,7 @@ data class SpendingLogsFilter(
     return allOf(
       search001Predicate(),
       start?.let { spendingLogEntity.time.instant.goe(it) },
-      end?.let { spendingLogEntity.time.instant.lt(it) }
+      end?.let { spendingLogEntity.time.instant.lt(it) },
     )
   }
 

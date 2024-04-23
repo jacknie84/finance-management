@@ -23,10 +23,14 @@ class CardUsageCustomRepositoryImpl: PagingRepositorySupport(CardUsageEntity::cl
   }
 
   override fun findAll(cardId: Long, filter: CardUsagesFilter, pageable: Pageable): Page<CardUsageEntity> {
-    return getPage(cardUsageEntity, pageable) { allOf(cardUsageEntity.file.card.id.eq(cardId), filter.predicate) }
+    return getPage(joinQuery(), pageable) { allOf(cardUsageEntity.file.card.id.eq(cardId), filter.predicate) }
   }
 
   override fun findAll(filter: CardUsagesFilter, pageable: Pageable): Page<CardUsageEntity> {
-    return getPage(cardUsageEntity, filter, pageable)
+    return getPage(joinQuery(), filter, pageable)
   }
+
+  private fun joinQuery() = from(cardUsageEntity)
+    .join(cardUsageEntity.log).fetchJoin()
+    .join(cardUsageEntity.file).fetchJoin()
 }

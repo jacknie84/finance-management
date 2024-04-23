@@ -2,10 +2,12 @@ package best.jacknie.finance.spending.log.application.port
 
 import best.jacknie.finance.core.jpa.querydsl.PredicateProvider
 import best.jacknie.finance.spending.log.domain.QCardUsageEntity.cardUsageEntity
+import best.jacknie.finance.spending.log.domain.QSpendingLogEntity.spendingLogEntity
 import com.querydsl.core.types.Predicate
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.Expressions.allOf
 import jakarta.validation.constraints.Positive
+import java.time.Instant
 
 data class CardUsagesFilter(
 
@@ -24,7 +26,17 @@ data class CardUsagesFilter(
    */
   var search001: Set<String>? = null,
 
-): PredicateProvider {
+  /**
+   * 검색 시작 시간
+   */
+  var start: Instant?,
+
+  /**
+   * 검색 종료 시간
+   */
+  var end: Instant?,
+
+  ): PredicateProvider {
 
   override val predicate: Predicate? get() {
     return allOf(
@@ -37,7 +49,9 @@ data class CardUsagesFilter(
             .or(cardUsageEntity.file.description.containsIgnoreCase(it))
             .or(cardUsageEntity.file.card.name.containsIgnoreCase(it))
         }
-        ?.reduce(BooleanExpression::or)
+        ?.reduce(BooleanExpression::or),
+      start?.let { cardUsageEntity.log.time.instant.goe(it) },
+      end?.let { cardUsageEntity.log.time.instant.lt(it) },
     )
   }
 }
