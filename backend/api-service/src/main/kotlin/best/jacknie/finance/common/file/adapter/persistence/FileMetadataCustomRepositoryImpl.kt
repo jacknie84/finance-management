@@ -7,8 +7,9 @@ import best.jacknie.finance.common.file.domain.QFileMetadataEntity.fileMetadataE
 import best.jacknie.finance.core.jpa.querydsl.PagingRepositorySupport
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.stereotype.Repository
 
-@Suppress("unused")
+@Repository("fileMetadataRepositoryImpl")
 class FileMetadataCustomRepositoryImpl: PagingRepositorySupport(FileMetadataEntity::class),
     FileMetadataCustomRepository {
 

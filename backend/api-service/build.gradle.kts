@@ -34,7 +34,6 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-integration")
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
   implementation("com.querydsl:querydsl-jpa::jakarta")
-  implementation("org.apache.poi:poi-ooxml:5.2.5")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
