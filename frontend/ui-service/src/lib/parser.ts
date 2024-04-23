@@ -72,7 +72,8 @@ class KbExcelRawDataMapper implements CardUsageRawDataMapper {
   }
 
   merchant(row: any[]): string {
-    return row[this.indices.merchant] as string
+    const merchant = row[this.indices.merchant] ?? "알 수 없음"
+    return merchant as string
   }
 
   status(row: any[]): CardUsageStatus {
