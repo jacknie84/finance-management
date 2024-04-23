@@ -22,7 +22,7 @@ data class PatchSpendingLog(
   /**
    * 태그 목록
    */
-  var tags: MutableSet<@NotBlank @Size(min = 3, max = 200) @Pattern(regexp = "(\\w|[가-힣])+") String>? = null,
+  var tags: MutableSet<@NotBlank @Size(min = 2, max = 200) @Pattern(regexp = "(\\w|[가-힣])+") String>? = null,
 
   /**
    * 지출 사용자 이름
