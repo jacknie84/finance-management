@@ -3,10 +3,7 @@ package best.jacknie.finance.spending.log.domain
 import jakarta.persistence.Embeddable
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import java.time.DayOfWeek
-import java.time.Instant
-import java.time.Month
-import java.time.ZoneId
+import java.time.*
 
 @Embeddable
 data class SpendingTime(
@@ -47,4 +44,20 @@ data class SpendingTime(
    * 시간
    */
   var hour: Int,
-)
+) {
+
+  companion object {
+
+    fun from(time: ZonedDateTime): SpendingTime {
+      return SpendingTime(
+        instant = time.toInstant(),
+        zone = time.zone,
+        year = time.year,
+        month = time.month,
+        dayOfMonth = time.dayOfMonth,
+        dayOfWeek = time.dayOfWeek,
+        hour = time.hour,
+      )
+    }
+  }
+}

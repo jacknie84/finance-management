@@ -3,6 +3,7 @@ package best.jacknie.finance.spending.log.application.service
 import best.jacknie.finance.core.web.exception.HttpStatusCodeException
 import best.jacknie.finance.spending.log.application.port.*
 import best.jacknie.finance.spending.log.domain.SpendingLogEntity
+import best.jacknie.finance.spending.log.domain.SpendingTime
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
@@ -29,7 +30,7 @@ class SpendingLogServiceImpl(
     val log = logRepository.save(SpendingLogEntity(
       summary = dto.summary,
       amount = dto.amount,
-      time = getSpendingTime(dto.time),
+      time = SpendingTime.from(dto.time),
       user = user,
     ))
     val tags = tagRepository.replaceAll(log, dto.tags)
@@ -49,7 +50,7 @@ class SpendingLogServiceImpl(
     log.apply {
       summary = dto.summary
       amount = dto.amount
-      time = getSpendingTime(dto.time)
+      time = SpendingTime.from(dto.time)
       user = userClient.getOrCreateUser(dto.username)
     }
     log = logRepository.save(log)
@@ -62,7 +63,7 @@ class SpendingLogServiceImpl(
     val user = dto.username?.let { userClient.getOrCreateUser(it) }
     log.apply {
       dto.amount?.let { amount = it }
-      dto.time?.let { time = getSpendingTime(it) }
+      dto.time?.let { time = SpendingTime.from(it) }
       user?.let { this.user = it }
     }
     log = logRepository.save(log)

@@ -6,6 +6,7 @@ import best.jacknie.finance.spending.log.application.port.*
 import best.jacknie.finance.spending.log.domain.CardUsageEntity
 import best.jacknie.finance.spending.log.domain.CardUsageFileEntity
 import best.jacknie.finance.spending.log.domain.SpendingLogEntity
+import best.jacknie.finance.spending.log.domain.SpendingTime
 import jakarta.persistence.EntityManager
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Page
@@ -64,7 +65,7 @@ class CardUsageServiceImpl(
     val log = logRepository.save(SpendingLogEntity(
       summary = dto.merchant,
       amount = if (dto.status.positive) dto.amount else -(dto.amount),
-      time = getSpendingTime(dto.time),
+      time = SpendingTime.from(dto.time),
       user = card.user,
     ))
     val file = getCardUsageFile(cardId, dto.fileId)
@@ -85,7 +86,7 @@ class CardUsageServiceImpl(
     usage.log.apply {
       summary = dto.merchant
       amount = if (dto.status.positive) dto.amount else -(dto.amount)
-      time = getSpendingTime(dto.time)
+      time = SpendingTime.from(dto.time)
       user = file.card.user
     }
     val log = logRepository.save(usage.log)

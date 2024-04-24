@@ -2,7 +2,6 @@ package best.jacknie.finance.spending.log.application.port
 
 import best.jacknie.finance.core.jpa.querydsl.PredicateProvider
 import best.jacknie.finance.spending.log.domain.QCardUsageEntity.cardUsageEntity
-import best.jacknie.finance.spending.log.domain.QSpendingLogEntity.spendingLogEntity
 import com.querydsl.core.types.Predicate
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.core.types.dsl.Expressions.allOf
