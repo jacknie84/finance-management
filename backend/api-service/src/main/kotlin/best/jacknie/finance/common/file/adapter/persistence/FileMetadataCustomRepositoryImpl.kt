@@ -14,6 +14,6 @@ class FileMetadataCustomRepositoryImpl: PagingRepositorySupport(FileMetadataEnti
     FileMetadataCustomRepository {
 
   override fun findAll(filter: FileMetadataFilter, pageable: Pageable): Page<FileMetadataEntity> {
-    return getPage(fileMetadataEntity, filter, pageable)
+    return getPage(fileMetadataEntity, pageable) { filter.key?.let { fileMetadataEntity.key.`in`(it) } }
   }
 }

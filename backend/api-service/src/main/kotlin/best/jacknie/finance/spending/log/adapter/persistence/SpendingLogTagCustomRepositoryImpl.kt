@@ -13,4 +13,11 @@ class SpendingLogTagCustomRepositoryImpl: PagingRepositorySupport(SpendingLogTag
   override fun findAllPreset(): List<String> {
     return from(spendingLogTagEntity).select(spendingLogTagEntity.tag).groupBy(spendingLogTagEntity.tag).fetch()
   }
+
+  override fun findAllRecommended(summary: String): List<SpendingLogTagEntity> {
+    return from(spendingLogTagEntity)
+      .join(spendingLogTagEntity.log).fetchJoin()
+      .where(spendingLogTagEntity.log.summary.containsIgnoreCase(summary))
+      .fetch()
+  }
 }

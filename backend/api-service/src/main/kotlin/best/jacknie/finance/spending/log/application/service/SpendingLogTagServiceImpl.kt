@@ -16,4 +16,21 @@ class SpendingLogTagServiceImpl(
     val tags = tagRepository.findAllPreset()
     return SpendingLogTagsPreset(tags)
   }
+
+  @Transactional(readOnly = true)
+  override fun getRecommendedSpendingLogTags(summary: String?): Set<String>? {
+    if (summary.isNullOrBlank()) {
+      return emptySet()
+    }
+    val tags = tagRepository.findAllRecommended(summary)
+    val exact = tags.filter { it.log.summary == summary }
+    if (exact.isNotEmpty()) {
+      return exact.map { it.tag }.toSet()
+    }
+    val like = tags.filter { it.log.summary?.contains(summary, true) == true }
+    if (like.isNotEmpty()) {
+      return like.map { it.tag }.toSet()
+    }
+    return emptySet()
+  }
 }
