@@ -27,7 +27,7 @@ class SpendingLogCustomRepositoryImpl: PagingRepositorySupport(SpendingLogEntity
       filter.search001?.let { getSearch001Predicate(it) },
       filter.start?.let { spendingLogEntity.time.instant.goe(it) },
       filter.end?.let { spendingLogEntity.time.instant.lt(it) },
-      filter.condition
+      filter.conditions
         ?.map { getPredicate(it, this::getQueryConditionBooleanExpression) }
         ?.reduce { acc, it -> or(acc, it) }
     )
@@ -52,12 +52,11 @@ class SpendingLogCustomRepositoryImpl: PagingRepositorySupport(SpendingLogEntity
     )
   }
 
-  private fun getQueryConditionBooleanExpression(condition: String): BooleanExpression? {
+  private fun getQueryConditionBooleanExpression(condition: SpendingLogsFilter.QueryCondition): BooleanExpression? {
     return when (condition) {
-      SpendingLogsFilter.EMPTY_TAGS -> selectOne().from(spendingLogTagEntity)
+      SpendingLogsFilter.QueryCondition.EMPTY_TAGS -> selectOne().from(spendingLogTagEntity)
         .where(spendingLogTagEntity.log.eq(spendingLogEntity))
         .notExists()
-      else -> null
     }
   }
 }

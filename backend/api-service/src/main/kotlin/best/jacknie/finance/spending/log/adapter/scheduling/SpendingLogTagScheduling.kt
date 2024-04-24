@@ -1,8 +1,7 @@
-package best.jacknie.finance.spending.log.adapter.schedule
+package best.jacknie.finance.spending.log.adapter.scheduling
 
 import best.jacknie.finance.core.utils.pagination.PageStream
 import best.jacknie.finance.core.utils.pagination.SpringDataPager
-import best.jacknie.finance.core.web.filter.PredefinedCondition
 import best.jacknie.finance.spending.log.application.port.PatchSpendingLog
 import best.jacknie.finance.spending.log.application.port.SpendingLogService
 import best.jacknie.finance.spending.log.application.port.SpendingLogTagService
@@ -14,14 +13,15 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
 
 @Component
-class SpendingLogTagSchedule(
+class SpendingLogTagScheduling(
   private val logService: SpendingLogService,
   private val tagService: SpendingLogTagService,
 ) {
 
   @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
   fun executeSpendingLogTaggingAutomation() {
-    val filter = SpendingLogsFilter(condition = PredefinedCondition.single(SpendingLogsFilter.EMPTY_TAGS))
+    val conditions = listOf(SpendingLogsFilter.condition(SpendingLogsFilter.QueryCondition.EMPTY_TAGS))
+    val filter = SpendingLogsFilter(conditions = conditions)
     val pageable = PageRequest.of(0, 100, Direction.DESC, "id")
     val pageStream = PageStream(SpringDataPager(pageable) { logService.getSpendingLogsPage(filter, it) })
     for (log in pageStream) {

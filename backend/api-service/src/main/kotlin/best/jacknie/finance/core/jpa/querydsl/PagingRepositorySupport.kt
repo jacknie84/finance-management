@@ -29,13 +29,14 @@ abstract class PagingRepositorySupport(type: KClass<*>): QuerydslRepositorySuppo
     }
   }
 
-  protected fun getPredicate(condition: PredefinedCondition, booleanExpression: (String) -> BooleanExpression?): Predicate? {
+  protected fun <T : Enum<T>> getPredicate(condition: PredefinedCondition<T>, booleanExpression: (T) -> BooleanExpression?): Predicate? {
     val operation = when (condition.reducing) {
       PredefinedCondition.Reducing.AND -> BooleanExpression::and
       PredefinedCondition.Reducing.OR -> BooleanExpression::or
     }
     return condition.items
       ?.mapNotNull { booleanExpression(it) }
+      ?.takeIf { it.isNotEmpty() }
       ?.reduce(operation)
   }
 }

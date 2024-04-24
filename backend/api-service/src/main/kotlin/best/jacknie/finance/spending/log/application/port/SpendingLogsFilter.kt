@@ -25,15 +25,28 @@ data class SpendingLogsFilter(
   /**
    * 예약 된 검색 조건
    */
-  @field:Valid
-  var condition: List<PredefinedCondition>? = null,
+  var conditions: List<@Valid PredefinedConditionImpl>? = null,
 
 ) {
 
-  companion object {
+  class PredefinedConditionImpl: PredefinedCondition<QueryCondition> {
+
+    override var items: Set<QueryCondition>? = null
+
+    override var reducing: PredefinedCondition.Reducing = PredefinedCondition.Reducing.OR
+  }
+
+  enum class QueryCondition {
     /**
      * 지출 내역에 태그가 없는 경우 검색
      */
-    const val EMPTY_TAGS = "EMPTY_TAGS"
+    EMPTY_TAGS
+  }
+
+  companion object {
+
+    fun condition(condition: QueryCondition): PredefinedConditionImpl {
+      return PredefinedConditionImpl().apply { items = setOf(condition) }
+    }
   }
 }
