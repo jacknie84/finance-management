@@ -11,3 +11,8 @@ export type PageRequest = {
   size?: number
   sort?: { fields: string[]; direction?: "asc" | "desc" }
 }
+
+export type PredefinedCondition<T> = {
+  items?: T[]
+  reducing?: "OR" | "AND"
+}

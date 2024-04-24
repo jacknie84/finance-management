@@ -12,7 +12,7 @@ import DeleteIcon from "@/components/icons/DeleteIcon"
 import EyeIcon from "@/components/icons/EyeIcon"
 import { isEmpty } from "@/lib/utils"
 import { Period } from "@/types"
-import { Button, Card, CardBody, CardFooter, Tooltip } from "@nextui-org/react"
+import { Button, Card, CardBody, CardFooter, Checkbox, Tooltip } from "@nextui-org/react"
 import { useQuery } from "@tanstack/react-query"
 import { createColumnHelper } from "@tanstack/react-table"
 import { useCallback, useMemo, useState } from "react"
@@ -28,14 +28,16 @@ export default function SpendingTags(props: Props) {
   const [pageRequest, setPageRequest] = useState<PageRequest>(props.pageRequest)
   const [period, setPeriod] = useState<Period>({})
   const [search, setSearch] = useState<string>()
+  const [isEmptyTags, setIsEmptyTags] = useState(false)
   const [selectedLogs, setSelectedLogs] = useState<SpendingLog[]>([])
   const {
     data: page = props.page,
     isPending,
     refetch,
   } = useQuery({
-    queryKey: ["getSpendingLogsPage", search, period, pageRequest],
-    queryFn: () => getSpendingLogsPage({ search001: search ? [search] : [], ...period }, pageRequest),
+    queryKey: ["getSpendingLogsPage", search, period, isEmptyTags, pageRequest],
+    queryFn: () =>
+      getSpendingLogsPage({ search001: search ? [search] : [], ...period, conditions: [{ items: isEmptyTags ? ["EMPTY_TAGS"] : [] }] }, pageRequest),
   })
   const columns = useMemo(
     () => [
@@ -110,6 +112,9 @@ export default function SpendingTags(props: Props) {
             <div className="flex flex-col gap-4">
               <PeriodSearchForm onChange={setPeriod} />
               <SearchInput onValueChange={onSearchChange} />
+              <Checkbox isSelected={isEmptyTags} onValueChange={setIsEmptyTags}>
+                태그 없는 목록
+              </Checkbox>
             </div>
           </CardBody>
         </Card>
