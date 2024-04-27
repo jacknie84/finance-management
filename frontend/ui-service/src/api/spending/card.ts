@@ -5,7 +5,7 @@ import { stringify } from "qs"
 import apiClient, { buildPageRequest } from "../api-client"
 import { Card } from "../common/card"
 import { Page, PageRequest } from "../types"
-import { SpendingLog } from "./log"
+import { SaveSpendingTime, SpendingLog } from "./log"
 
 const path = "card/usages"
 const pathWithCardId = (cardId: string | number) => `cards/${cardId}/usages`
@@ -57,7 +57,7 @@ export type SaveCardUsage = {
   merchant: string
   status: CardUsageStatus
   amount: number
-  time: string
+  time: SaveSpendingTime
   tags?: string[]
   fileId: string | number
 }

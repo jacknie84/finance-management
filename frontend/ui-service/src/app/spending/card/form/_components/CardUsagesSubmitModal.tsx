@@ -47,7 +47,10 @@ export default function CardUsagesSubmitModal({ model, onClose }: Props) {
           merchant,
           status,
           amount,
-          time: time.toJSON(),
+          time: {
+            instant: time.toJSON(),
+            zone: "Asia/Seoul",
+          },
           fileId: usageFileId,
         } as SaveCardUsage
         if (usage) {

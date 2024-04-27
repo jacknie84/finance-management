@@ -63,9 +63,14 @@ export type SpendingLogsQueryCondition = "EMPTY_TAGS"
 export type SaveSpendingLog = {
   summary?: string
   amount: number
-  time: string
+  time: SaveSpendingTime
   tags: string[]
   username: string
+}
+
+export type SaveSpendingTime = {
+  instant: string
+  zone: "Asia/Seoul"
 }
 
 export type PatchSpendingLog = Partial<SaveSpendingLog>

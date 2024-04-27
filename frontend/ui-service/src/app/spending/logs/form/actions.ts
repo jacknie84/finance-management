@@ -15,7 +15,10 @@ export async function saveSpendingLog(id: string | number | undefined, _prev: un
     var log = {
       summary: formData.get("summary"),
       amount: parseMoney((formData.get("amount") as string) ?? "0"),
-      time: moment(`${formData.get("date")}T${formData.get("time")}`).format(),
+      time: {
+        instant: moment(`${formData.get("date")}T${formData.get("time")}`).format(),
+        zone: "Asia/Seoul",
+      },
       tags: formData.getAll("tags"),
       username: formData.get("username"),
     } as SaveSpendingLog
