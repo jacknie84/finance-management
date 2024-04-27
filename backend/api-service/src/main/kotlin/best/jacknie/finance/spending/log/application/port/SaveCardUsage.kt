@@ -1,23 +1,22 @@
 package best.jacknie.finance.spending.log.application.port
 
 import best.jacknie.finance.spending.log.domain.CardUsageStatus
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.Pattern
-import jakarta.validation.constraints.PositiveOrZero
-import jakarta.validation.constraints.Size
-import java.time.ZonedDateTime
+import jakarta.validation.Valid
+import jakarta.validation.constraints.*
 
 data class SaveCardUsage(
 
   /**
    * 승인 번호
    */
+  @field:NotBlank
   @field:Size(max = 200)
   var approvalNumber: String,
 
   /**
    * 가맹점 이름
    */
+  @field:NotBlank
   @field:Size(max = 200)
   var merchant: String,
 
@@ -35,7 +34,8 @@ data class SaveCardUsage(
   /**
    * 지출 시간
    */
-  var time: ZonedDateTime,
+  @field:Valid
+  var time: SaveSpendingTime,
 
   /**
    * 태그 목록
@@ -45,5 +45,6 @@ data class SaveCardUsage(
   /**
    * 업로드 카드 내역 파일 아이디
    */
+  @field:Positive
   var fileId: Long,
 )

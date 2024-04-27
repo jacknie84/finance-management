@@ -1,5 +1,6 @@
 package best.jacknie.finance.spending.log.domain
 
+import best.jacknie.finance.spending.log.application.port.SaveSpendingTime
 import jakarta.persistence.Embeddable
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -48,15 +49,16 @@ data class SpendingTime(
 
   companion object {
 
-    fun from(time: ZonedDateTime): SpendingTime {
+    fun from(time: SaveSpendingTime): SpendingTime {
+      val zonedDateTime = ZonedDateTime.ofInstant(time.instant, time.zone)
       return SpendingTime(
-        instant = time.toInstant(),
+        instant = time.instant,
         zone = time.zone,
-        year = time.year,
-        month = time.month,
-        dayOfMonth = time.dayOfMonth,
-        dayOfWeek = time.dayOfWeek,
-        hour = time.hour,
+        year = zonedDateTime.year,
+        month = zonedDateTime.month,
+        dayOfMonth = zonedDateTime.dayOfMonth,
+        dayOfWeek = zonedDateTime.dayOfWeek,
+        hour = zonedDateTime.hour,
       )
     }
   }

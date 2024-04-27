@@ -3,7 +3,7 @@ package best.jacknie.finance.spending.log.application.port
 import best.jacknie.finance.common.user.domain.UserEntity
 import best.jacknie.finance.spending.log.domain.SpendingLogEntity
 import best.jacknie.finance.spending.log.domain.SpendingLogTagEntity
-import java.time.Instant
+import java.time.ZonedDateTime
 
 data class SpendingLog(
 
@@ -30,7 +30,7 @@ data class SpendingLog(
   /**
    * 지출 시간
    */
-  val time: Instant,
+  val time: ZonedDateTime,
 
   /**
    * 사용자
@@ -45,7 +45,7 @@ data class SpendingLog(
         id = log.id!!,
         summary = log.summary,
         amount = log.amount,
-        time = log.time.instant,
+        time = ZonedDateTime.ofInstant(log.time.instant, log.time.zone),
         tags = tags?.map { it.tag }?.toSet(),
         user = log.user
       )

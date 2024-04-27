@@ -1,10 +1,10 @@
 package best.jacknie.finance.spending.log.application.port
 
+import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Positive
 import jakarta.validation.constraints.Size
-import java.time.ZonedDateTime
 
 data class PatchSpendingLog(
 
@@ -17,7 +17,8 @@ data class PatchSpendingLog(
   /**
    * 지출 시간
    */
-  var time: ZonedDateTime? = null,
+  @field:Valid
+  var time: SaveSpendingTime? = null,
 
   /**
    * 태그 목록
