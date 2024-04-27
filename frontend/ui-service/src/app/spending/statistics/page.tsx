@@ -142,17 +142,17 @@ export default function SpendingStatisticsPage() {
                 legends={[
                   {
                     anchor: "bottom",
-                    direction: "row",
+                    direction: "column",
                     justify: false,
-                    translateX: 0,
+                    translateX: 320,
                     translateY: 56,
                     itemsSpacing: 0,
-                    itemWidth: 100,
+                    itemWidth: 60,
                     itemHeight: 18,
                     itemTextColor: "#FFF",
-                    itemDirection: "left-to-right",
+                    itemDirection: "right-to-left",
                     itemOpacity: 1,
-                    symbolSize: 18,
+                    symbolSize: 14,
                     symbolShape: "circle",
                     effects: [
                       {
